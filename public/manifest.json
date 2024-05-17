@@ -1,0 +1,8 @@
+{
+  "background_color": "#ffffff",
+  "display": "standalone",
+  "scope": "/",
+  "start_url": "/home",
+  "name": "Padrão Hybriun",
+  "short_name": "Hybriun"
+}
