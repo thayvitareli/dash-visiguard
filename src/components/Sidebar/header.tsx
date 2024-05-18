@@ -37,14 +37,22 @@ export default function NavHeader() {
       borderBottomColor="gray.50"
       height="10vh"
     >
-      <HStack spacing="24px">
-        <Icon
-          cursor="pointer"
-          as={Bars3Icon}
-          fontSize="26px"
-          onClick={togglePanel}
-        />
-      </HStack>
+      <Flex alignItems={"center"} gap={10}>
+        <HStack spacing="24px">
+          <Icon
+            cursor="pointer"
+            as={Bars3Icon}
+            fontSize="26px"
+            onClick={togglePanel}
+            color="blue"
+          />
+        </HStack>
+        <Flex alignItems={"center"}>
+          <Image src="/Logo.png" w="32px" h="32px" />
+
+          <Text color="blue">VisiGuardSys </Text>
+        </Flex>
+      </Flex>
 
       <HStack spacing="24px">
         <Menu>

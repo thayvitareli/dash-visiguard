@@ -15,11 +15,22 @@ export default function NavItem({ title, icon, link }: NavItemProps) {
       flexDirection="column"
       alignItems={isOpen ? "flex-start" : "center"}
       w="100%"
+      sx={{
+        "&:hover": {
+          bg: "blue.100",
+        },
+      }}
     >
-      <Link href={`/${link}`}>
-        <Flex justifyItems="center" gap={2} margin="12px">
-          <Icon as={icon} />
-          {isOpen && <Text>{title}</Text>}
+      <Link href={`/${link}`} _hover={"none"}>
+        <Flex
+          justifyContent={"center"}
+          alignItems="center"
+          gap={2}
+          marginTop={"5px"}
+          marginStart={"5px"}
+        >
+          <Icon as={icon} color="blue" />
+          {isOpen && <Text color="blue">{title}</Text>}
         </Flex>
       </Link>
     </Flex>
