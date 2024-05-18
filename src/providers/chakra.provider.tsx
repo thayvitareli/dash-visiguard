@@ -28,7 +28,7 @@ export function ChakraProviderApp({ children }: { children: React.ReactNode }) {
     styles: {
       global: {
         body: {
-          backgroundColor: "gray.100",
+          backgroundColor: "gray.50",
           color: colors.text.primary,
         },
       },
