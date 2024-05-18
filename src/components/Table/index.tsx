@@ -1,85 +1,90 @@
-import React from 'react'
-
+import React from "react";
 import {
-  useTable,
-  useGroupBy,
-  useFilters,
-  useSortBy,
-  useExpanded,
-+  usePagination,
-} from 'react-table'
+  Box,
+  Table as ChakraTable,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
+  Button,
+  Text,
+  Flex,
+} from "@chakra-ui/react";
+import { Colors } from "assets/config/theme";
 
-// Create a component to render your table
-function MyTable(props) {
-  // Use the useTable hook to create your table configuration
-  const instance = useTable(
-    props,
-    useGroupBy,
-    useFilters,
-    useSortBy,
-    useExpanded,
-+   usePagination,
-  )
+const Table = ({
+  columns,
+  rows,
+  rowsPerPage,
+  currentPage,
+  setCurrentPage,
+  totalRows,
+}: any) => {
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) =>
+      Math.min(prevPage + 1, Math.floor(totalRows / rowsPerPage))
+    );
+  };
 
-  // Use the state and functions returned from useTable to build your UI
-  const {
-    getTableProps,
-    headerGroups,
-    rows,
-    getRowProps,
-    prepareRow,
-+   pageOptions,
-+   page,
-+   state: { pageIndex, pageSize },
-+   gotoPage,
-+   previousPage,
-+   nextPage,
-+   setPageSize,
-+   canPreviousPage,
-+   canNextPage,
-  } = instance
+  const handlePrevPage = () => {
+    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+  };
 
-  // Render the UI for your table
   return (
-    <div>
-      <table {...getTableProps()}>
-        ...
-      </table>
-+     <div>
-+       <button onClick={() => previousPage()} disabled={!canPreviousPage}>
-+         Previous Page
-+       </button>
-+       <button onClick={() => nextPage()} disabled={!canNextPage}>
-+         Next Page
-+       </button>
-+       <div>
-+         Page{' '}
-+         <em>
-+           {pageIndex + 1} of {pageOptions.length}
-+         </em>
-+       </div>
-+       <div>Go to page:</div>
-+       <input
-+         type="number"
-+         defaultValue={pageIndex + 1 || 1}
-+         onChange={e => {
-+           const page = e.target.value ? Number(e.target.value) - 1 : 0
-+           gotoPage(page)
-+         }}
-+       />
-+       <select
-+         value={pageSize}
-+         onChange={e => {
-+           setPageSize(Number(e.target.value))
-+         }}
-+       >
-+         {pageSizeOptions.map(pageSize => (
-+           <option key={pageSize} value={pageSize}>
-+             Show {pageSize}
-+           </option>
-+         ))}
-+       </select>
-+     </div>
-    </div>
-  )
-}
+    <Box>
+      <ChakraTable
+        backgroundColor={Colors.second}
+        borderRadius={4}
+        borderWidth={1}
+      >
+        <Thead>
+          <Tr>
+            {columns.map((col) => (
+              <Th color="white" key={col.accessor || col.Header}>
+                {col.Header}
+              </Th>
+            ))}
+          </Tr>
+        </Thead>
+        <Tbody>
+          {rows?.map((row, rowIndex) => (
+            <Tr key={rowIndex} bg={rowIndex % 2 === 0 ? "#fff" : "#8FAADC"}>
+              {columns.map((col) => (
+                <Td key={col.accessor || col.Header}>
+                  {col.Cell ? col.Cell({ row }) : row[col.accessor]}
+                </Td>
+              ))}
+            </Tr>
+          ))}
+        </Tbody>
+      </ChakraTable>
+      <Flex
+        alignItems="center"
+        backgroundColor={"gray.200"}
+        gap={5}
+        justifyContent={"center"}
+      >
+        <Button
+          onClick={handlePrevPage}
+          disabled={currentPage === 0}
+          bgColor={"gray.300"}
+        >
+          Anterior
+        </Button>
+        <Text>
+          Página {currentPage + 1} de {Math.ceil(totalRows / rowsPerPage)}
+        </Text>
+        <Button
+          onClick={handleNextPage}
+          disabled={currentPage >= Math.floor(totalRows / rowsPerPage)}
+          bgColor={"gray.300"}
+        >
+          Próxima
+        </Button>
+      </Flex>
+    </Box>
+  );
+};
+
+export default Table;
