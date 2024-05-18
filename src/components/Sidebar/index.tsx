@@ -1,10 +1,12 @@
 "use client";
 import { Flex, Text } from "@chakra-ui/react";
-import { FiHome } from "react-icons/fi";
+import { GiCityCar } from "react-icons/gi";
+import { FaHandshake } from "react-icons/fa";
+import { FaRegAddressCard } from "react-icons/fa6";
+
 import { useSidebarContext } from "contexts/sidebar.context";
 import NavItem from "./navItem";
 import { BuildingOffice2Icon, UserGroupIcon } from "@heroicons/react/24/solid";
-import { Icon as MyIcon } from "../../assets/svg/icons/Index";
 import { Colors } from "assets/config/theme";
 
 export default function SideBar() {
@@ -35,9 +37,9 @@ export default function SideBar() {
         icon={UserGroupIcon}
         link="collaborator"
       />
-      <NavItem title={"Visitantes"} icon={FiHome} link="visitor" />
-      <NavItem title={"Prest. serviços"} icon={FiHome} link="suplier" />
-      <NavItem title={"Veículos"} icon={MyIcon.Car} link="vehicle" />
+      <NavItem title={"Visitantes"} icon={FaRegAddressCard} link="visitor" />
+      <NavItem title={"Prest. serviços"} icon={FaHandshake} link="suplier" />
+      <NavItem title={"Veículos"} icon={GiCityCar} link="vehicle" />
     </Flex>
   );
 }

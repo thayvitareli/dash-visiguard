@@ -32,7 +32,7 @@ export default function NavItem({ title, icon, link }: NavItemProps) {
             marginTop={"5px"}
             marginStart={"5px"}
           >
-            <Icon as={icon} color={Colors.second} />
+            <Icon as={icon} color={Colors.second} boxSize={7} />
             {isOpen && <Text color={Colors.second}>{title}</Text>}
           </Flex>
         </Link>

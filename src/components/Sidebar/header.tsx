@@ -43,9 +43,9 @@ export default function NavHeader() {
           <Icon
             cursor="pointer"
             as={Bars3Icon}
-            fontSize="26px"
             onClick={togglePanel}
             color={Colors.second}
+            boxSize={8}
           />
         </HStack>
         <Flex alignItems={"center"}>
