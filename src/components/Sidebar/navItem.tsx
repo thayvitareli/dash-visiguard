@@ -1,4 +1,5 @@
 import { Flex, Icon, Link, Text, Tooltip } from "@chakra-ui/react";
+import { Colors } from "assets/config/theme";
 import { useSidebarContext } from "contexts/sidebar.context";
 
 interface NavItemProps {
@@ -31,8 +32,8 @@ export default function NavItem({ title, icon, link }: NavItemProps) {
             marginTop={"5px"}
             marginStart={"5px"}
           >
-            <Icon as={icon} color="blue" />
-            {isOpen && <Text color="blue">{title}</Text>}
+            <Icon as={icon} color={Colors.second} />
+            {isOpen && <Text color={Colors.second}>{title}</Text>}
           </Flex>
         </Link>
       </Tooltip>

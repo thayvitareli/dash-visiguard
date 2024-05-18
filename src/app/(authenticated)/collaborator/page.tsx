@@ -1,10 +1,13 @@
 "use client";
-import { Heading } from "@chakra-ui/react";
+import { Heading, Text } from "@chakra-ui/react";
+import { Colors, TextSize } from "assets/config/theme";
 
 export default function Collaborator() {
   return (
     <>
-      <Heading>Colaboradores</Heading>
+      <Text color={Colors.primary} fontSize={TextSize.md}>
+        Colaboradores
+      </Text>
       <Heading>Em construção</Heading>
     </>
   );

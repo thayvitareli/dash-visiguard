@@ -5,6 +5,7 @@ import { useSidebarContext } from "contexts/sidebar.context";
 import NavItem from "./navItem";
 import { BuildingOffice2Icon, UserGroupIcon } from "@heroicons/react/24/solid";
 import { Icon as MyIcon } from "../../assets/svg/icons/Index";
+import { Colors } from "assets/config/theme";
 
 export default function SideBar() {
   const { isOpen } = useSidebarContext();
@@ -24,7 +25,7 @@ export default function SideBar() {
       borderRightColor="gray.50"
     >
       {isOpen && (
-        <Text alignSelf={"start"} color="blue" p="5">
+        <Text alignSelf={"start"} color={Colors.second} p="5">
           MENU
         </Text>
       )}

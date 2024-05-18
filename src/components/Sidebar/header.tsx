@@ -17,6 +17,7 @@ import {
   Bars3Icon,
   ChevronDownIcon,
 } from "@heroicons/react/24/solid";
+import { Colors } from "assets/config/theme";
 
 import { AuthContext } from "contexts/auth.context";
 import { useSidebarContext } from "contexts/sidebar.context";
@@ -44,13 +45,13 @@ export default function NavHeader() {
             as={Bars3Icon}
             fontSize="26px"
             onClick={togglePanel}
-            color="blue"
+            color={Colors.second}
           />
         </HStack>
         <Flex alignItems={"center"}>
           <Image src="/Logo.png" w="32px" h="32px" />
 
-          <Text color="blue">VisiGuardSys </Text>
+          <Text color={Colors.second}>VisiGuardSys </Text>
         </Flex>
       </Flex>
 
