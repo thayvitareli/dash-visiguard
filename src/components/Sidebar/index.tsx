@@ -1,14 +1,10 @@
 "use client";
-import { Flex, IconButton } from "@chakra-ui/react";
-import { useContext, useState } from "react";
-import { FiHome, FiMenu } from "react-icons/fi";
+import { Flex, Text } from "@chakra-ui/react";
+import { FiHome } from "react-icons/fi";
 import { useSidebarContext } from "contexts/sidebar.context";
 import NavItem from "./navItem";
-import {
-  BuildingOffice2Icon,
-  ChartBarIcon,
-  UserGroupIcon,
-} from "@heroicons/react/24/solid";
+import { BuildingOffice2Icon, UserGroupIcon } from "@heroicons/react/24/solid";
+import { Icon as MyIcon } from "../../assets/svg/icons/Index";
 
 export default function SideBar() {
   const { isOpen } = useSidebarContext();
@@ -27,6 +23,11 @@ export default function SideBar() {
       borderRightWidth={2}
       borderRightColor="gray.50"
     >
+      {isOpen && (
+        <Text alignSelf={"start"} color="blue" p="5">
+          MENU
+        </Text>
+      )}
       <NavItem title={"Home"} icon={BuildingOffice2Icon} link="home" />
       <NavItem
         title={"Colaboradores"}
@@ -35,7 +36,7 @@ export default function SideBar() {
       />
       <NavItem title={"Visitantes"} icon={FiHome} link="visitor" />
       <NavItem title={"Prest. serviços"} icon={FiHome} link="suplier" />
-      <NavItem title={"Veículos"} icon={ChartBarIcon} link="vehicle" />
+      <NavItem title={"Veículos"} icon={MyIcon.Car} link="vehicle" />
     </Flex>
   );
 }

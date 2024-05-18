@@ -41,44 +41,54 @@ export default function AuthPage() {
   });
 
   return (
-    <Flex w={"100vw"} justify={"center"} align={"center"}>
-      <Flex w={{ base: "100%", sm: 350 }} flexDirection={"column"}>
+    <Flex w="100vw" h="100vh" justify={"center"} align={"center"}>
+      <Flex
+        w={{ base: "100%", sm: 350, md: 400 }}
+        flexDirection="column"
+        bgColor="white"
+        alignSelf="center"
+        borderWidth={1}
+        borderRadius={30}
+        alignItems={"center"}
+        p={10}
+      >
         <Image
           mb="8"
           w="100px"
           alignSelf="center"
-          src={"/public/Logo.png"}
+          src={"/Logo.png"}
           alt="logo"
         />
 
-        <Stack spacing={4}>
-          <Input
-            placeholder="Digite o cpf"
-            name="cpf"
-            value={Mask.cpf.value(values.cpf)}
-            label="CPF"
-            onChange={(e: any) => setFieldValue("cpf", e.target.value)}
-            onBlur={handleBlur}
-            error={errors.cpf}
-            touched={touched.cpf}
-          />
-          <Input
-            name="password"
-            label="Senha"
-            onChange={(e: any) => setFieldValue("password", e.target.value)}
-            onBlur={handleBlur}
-            error={errors.password}
-            touched={touched.password}
-            password
-          />
-        </Stack>
+        <Input
+          placeholder="Digite o cpf"
+          name="cpf"
+          value={Mask.cpf.value(values.cpf)}
+          label="CPF"
+          onChange={(e: any) => setFieldValue("cpf", e.target.value)}
+          onBlur={handleBlur}
+          error={errors.cpf}
+          touched={touched.cpf}
+        />
+        <Input
+          name="password"
+          label="Senha"
+          onChange={(e: any) => setFieldValue("password", e.target.value)}
+          onBlur={handleBlur}
+          error={errors.password}
+          touched={touched.password}
+          password
+        />
+
         <Button
           mt={8}
+          mb={8}
           variant="primary"
           size="lg"
           isLoading={isSubmitting}
           onClick={() => handleSubmit()}
-          width={"90%"}
+          width={"40%"}
+          alignSelf={"center"}
         >
           Entrar
         </Button>

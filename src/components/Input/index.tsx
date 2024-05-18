@@ -20,6 +20,7 @@ interface InputProps {
   touched?: boolean;
   password?: boolean;
   value?: any;
+  borderColor?: string;
 }
 
 const style = {
@@ -39,18 +40,20 @@ export default function Input({
   touched,
   password,
   value,
+  borderColor = "black",
 }: InputProps) {
   const [show, setShow] = useState(false);
 
   return password ? (
     <Flex direction={"column"} width={"100%"}>
       <Text>{label}</Text>
-      <InputGroup style={style} mt={2}>
+      <InputGroup style={style} mt={2} alignItems={"center"}>
         <InputChakra
           type={show ? "text" : "password"}
           placeholder="Digite a senha"
           borderWidth={0}
           onChange={onChange}
+          borderColor={borderColor}
         />
         <InputRightElement width="4.5rem">
           <Button
@@ -80,6 +83,7 @@ export default function Input({
         mt={2}
         style={style}
         value={value}
+        borderColor={borderColor}
       />
       {error && touched && (
         <Text color={"red"} mt={2}>

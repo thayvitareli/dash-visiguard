@@ -1,4 +1,4 @@
-import { Flex, Icon, Link, Text } from "@chakra-ui/react";
+import { Flex, Icon, Link, Text, Tooltip } from "@chakra-ui/react";
 import { useSidebarContext } from "contexts/sidebar.context";
 
 interface NavItemProps {
@@ -15,24 +15,27 @@ export default function NavItem({ title, icon, link }: NavItemProps) {
       flexDirection="column"
       alignItems={isOpen ? "flex-start" : "center"}
       w="100%"
+      pl={isOpen ? "5" : 0}
       sx={{
         "&:hover": {
           bg: "blue.100",
         },
       }}
     >
-      <Link href={`/${link}`} _hover={"none"}>
-        <Flex
-          justifyContent={"center"}
-          alignItems="center"
-          gap={2}
-          marginTop={"5px"}
-          marginStart={"5px"}
-        >
-          <Icon as={icon} color="blue" />
-          {isOpen && <Text color="blue">{title}</Text>}
-        </Flex>
-      </Link>
+      <Tooltip label={!isOpen ? `Ir para página: ${title}` : ""}>
+        <Link href={`/${link}`} _hover={"none"}>
+          <Flex
+            justifyContent={"center"}
+            alignItems="center"
+            gap={2}
+            marginTop={"5px"}
+            marginStart={"5px"}
+          >
+            <Icon as={icon} color="blue" />
+            {isOpen && <Text color="blue">{title}</Text>}
+          </Flex>
+        </Link>
+      </Tooltip>
     </Flex>
   );
 }
