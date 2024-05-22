@@ -17,6 +17,7 @@ import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 import Input from "components/Input";
 import Panel from "components/Panel";
 import Table from "components/Table";
+import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { CollaboratorHook } from "hooks";
 import { useEffect, useState } from "react";
@@ -28,6 +29,8 @@ export default function Collaborator() {
   const [search, setSearch] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [inputSearch, setInputSearch] = useState("");
+  const [inputSearchByRegister, setInputSearchByRegister] = useState("");
 
   const getData = async () => {
     const result = await CollaboratorHook.findMany({
@@ -41,7 +44,7 @@ export default function Collaborator() {
 
   useEffect(() => {
     getData();
-  }, [currentPage, debouncedSearch]);
+  }, [currentPage, search]);
 
   const COLUMNS = [
     {
@@ -56,13 +59,25 @@ export default function Collaborator() {
     },
     {
       Header: "Cargo",
+      accessor: "position",
+      Cell: ({ row }: { row: any }) => <Text>{row?.position}</Text>,
+    },
+    {
+      Header: "Setor",
       accessor: "departament",
       Cell: ({ row }: { row: any }) => <Text>{row?.departament}</Text>,
     },
     {
+      Header: "Cadastrado em",
+      accessor: "created_at",
+      Cell: ({ row }: { row: any }) => (
+        <Text>{dayjs(row?.created_at).format("DD/MM/YYYY")}</Text>
+      ),
+    },
+    {
       Header: "Actions",
       Cell: ({ row }: { row: any }) => (
-        <Button onClick={() => console.log(row?.name)}>
+        <Button onClick={() => console.log(row)}>
           <Icon as={EllipsisVerticalIcon} />
         </Button>
       ),
@@ -83,26 +98,39 @@ export default function Collaborator() {
     onSubmit: createCollaborator,
   });
 
+  console.log(inputSearch);
+
+  console.log(search);
+
   const onChangeSearch = () => {};
 
   return (
     <Panel>
       <Text color={Colors.primary} fontSize={TextSize.heading}>
-        Área dos Colaboradores
+        Área de Colaboradores
       </Text>
 
       <Flex justifyContent="space-between" alignItems={"center"} gap={5}>
         <Input
           name={"name"}
           placeholder="Digite o nome"
-          onChange={handleChange}
+          onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
           name={"register_employ"}
           placeholder="Digite o Registro"
-          onChange={handleChange}
+          onChange={(e) => setInputSearchByRegister(e.target.value)}
         />
-        <Button style={ButtonStyle}>Pesquisar</Button>
+        <Button
+          style={ButtonStyle}
+          onClick={() => {
+            if (inputSearch) setSearch(inputSearch);
+            else if (inputSearchByRegister) setSearch(inputSearchByRegister);
+            else setSearch("");
+          }}
+        >
+          Pesquisar
+        </Button>
         <Button style={ButtonStyle} onClick={() => setIsOpen(true)}>
           Cadastrar
         </Button>

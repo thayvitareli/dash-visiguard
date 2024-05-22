@@ -12,8 +12,8 @@ export const findMany = async ({
   toast?: any;
 }) => {
   try {
-    console.log(skip, take);
-    const response = await api.get("/suplier", {
+    console.log("hook");
+    const response = await api.get("/visitor", {
       params: {
         skip,
         take,
