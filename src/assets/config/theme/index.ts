@@ -12,3 +12,9 @@ export const TextSize = {
 export const ButtonColor = {
   primary: "#4472C4",
 };
+
+export const ButtonStyle = {
+  backgroundColor: "#4472C4",
+  color: "white",
+  width: "250px",
+};

@@ -1,11 +1,14 @@
 "use client";
-import { Heading } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
+import { Colors, TextSize } from "assets/config/theme";
 
 export default function Visitor() {
   return (
     <>
-      <Heading>Visitantes</Heading>
-      <Heading>Em construção</Heading>
+      <Text fontSize={TextSize.heading} color={Colors.primary}>
+        Área dos Visitantes
+      </Text>
+      <Text>Em construção</Text>
     </>
   );
 }

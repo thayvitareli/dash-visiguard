@@ -36,8 +36,8 @@ export default function Input({
   placeholder,
   onBlur,
   label,
-  error,
-  touched,
+  error = false,
+  touched = false,
   password,
   value,
   borderColor = "black",
@@ -73,14 +73,14 @@ export default function Input({
       )}
     </Flex>
   ) : (
-    <Flex direction={"column"} width={"100%"}>
+    <Flex direction={"column"} width={"100%"} justifyContent={"center"}>
       <Text>{label}</Text>
       <InputChakra
         placeholder={placeholder}
         name={name}
         onChange={onChange}
         onBlur={onBlur}
-        mt={2}
+        mt={label ? 2 : 0}
         style={style}
         value={value}
         borderColor={borderColor}
