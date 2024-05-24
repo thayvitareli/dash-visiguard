@@ -11,11 +11,18 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  SimpleGrid,
+  useToast,
 } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import {
+  DepartamentsOptions,
+  PositionsOptions,
+} from "assets/config/company-departaments";
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 import Input from "components/Input";
 import Panel from "components/Panel";
+import SelectData from "components/Select";
 import Table from "components/Table";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
@@ -27,10 +34,11 @@ export default function Collaborator() {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [inputSearch, setInputSearch] = useState("");
   const [inputSearchByRegister, setInputSearchByRegister] = useState("");
+
+  const toast = useToast();
 
   const getData = async () => {
     const result = await CollaboratorHook.findMany({
@@ -45,6 +53,28 @@ export default function Collaborator() {
   useEffect(() => {
     getData();
   }, [currentPage, search]);
+
+  //@ts-ignore
+  const createCollaborator = async (values) => {
+    const result = await CollaboratorHook.create(values, toast);
+
+    if (result) {
+      setIsOpen(false);
+    }
+  };
+
+  const INITIAL_VALUES = {
+    name: "",
+    register_employee: "",
+    position: "",
+    departament: "",
+  };
+
+  const { values, handleChange, handleReset, handleSubmit, setFieldValue } =
+    useFormik({
+      initialValues: INITIAL_VALUES,
+      onSubmit: createCollaborator,
+    });
 
   const COLUMNS = [
     {
@@ -84,25 +114,7 @@ export default function Collaborator() {
     },
   ];
 
-  const createCollaborator = () => {};
-
-  const INITIAL_VALUES = {
-    name: "",
-    register_employ: "",
-    position: "",
-    department: "",
-  };
-
-  const { values, handleChange, handleReset, handleSubmit } = useFormik({
-    initialValues: INITIAL_VALUES,
-    onSubmit: createCollaborator,
-  });
-
-  console.log(inputSearch);
-
-  console.log(search);
-
-  const onChangeSearch = () => {};
+  console.log(values);
 
   return (
     <Panel>
@@ -114,11 +126,13 @@ export default function Collaborator() {
         <Input
           name={"name"}
           placeholder="Digite o nome"
+          //@ts-ignore
           onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
-          name={"register_employ"}
+          name={"register_employee"}
           placeholder="Digite o Registro"
+          //@ts-ignore
           onChange={(e) => setInputSearchByRegister(e.target.value)}
         />
         <Button
@@ -145,21 +159,69 @@ export default function Collaborator() {
         totalRows={data.total}
       />
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size={"xl"}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader color={Colors.primary}>
+            Cadastro de Colaborador
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input label="Nome" onChange={undefined} />
-            <Input label="Registro" onChange={undefined} />
+            <Flex flexDir={"column"}>
+              <Flex gap="12px">
+                <Input
+                  name="name"
+                  label="Nome"
+                  onChange={handleChange}
+                  borderColor={Colors.second}
+                  placeholder="Digite o nome"
+                />
+                <Input
+                  name="register_employee"
+                  label="Registro"
+                  onChange={handleChange}
+                  borderColor={Colors.second}
+                  placeholder="Digite o número de registro"
+                />
+              </Flex>
+              <Flex gap="12px">
+                <SelectData
+                  name="position"
+                  options={PositionsOptions}
+                  //@ts-ignore
+                  onChange={(e) => {
+                    console.log(e), setFieldValue("position", e?.value);
+                  }}
+                  label="cargo"
+                  borderColor={Colors.second}
+                  placeholder="Selecione o cargo"
+                />
+                <SelectData
+                  name="departament"
+                  options={DepartamentsOptions}
+                  //@ts-ignore
+                  onChange={(e) => setFieldValue("departament", e?.value)}
+                  label="setor"
+                  borderColor={Colors.second}
+                  placeholder="Digite o setor"
+                />
+              </Flex>
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => setIsOpen(false)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={(e) => {
+                setIsOpen(false), handleReset(e);
+              }}
+            >
               Cancelar
             </Button>
-            <Button colorScheme="blue">Salvar</Button>
+            <Button colorScheme="blue" onClick={() => handleSubmit()}>
+              Salvar
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
