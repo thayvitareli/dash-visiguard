@@ -1,3 +1,4 @@
+import { iCollaborator } from "interfaces/hooks";
 import api from "services/api";
 
 export const findMany = async ({
@@ -21,4 +22,30 @@ export const findMany = async ({
 
     return response.data;
   } catch (error: any) {}
+};
+
+export const create = async (
+  data: iCollaborator.CreateCollaborator,
+  toast: any
+) => {
+  try {
+    const response = await api.post("/collaborator", data);
+
+    toast({
+      title: "Sucesso!",
+      description: "Colaborador criado com sucesso",
+      status: "success",
+      duration: 9000,
+      isClosable: true,
+    });
+    return response.data;
+  } catch (error: any) {
+    toast({
+      title: "Oops!",
+      description: error?.response?.data?.message,
+      status: "error",
+      duration: 9000,
+      isClosable: true,
+    });
+  }
 };

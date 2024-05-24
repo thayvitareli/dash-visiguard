@@ -27,7 +27,12 @@ export default function Suplier() {
   const [data, setData] = useState([] as any);
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [inputSearch, setInputSearch] = useState("");
+  const [inputSearchByCNPJ, setInputSearchByCNPJ] = useState("");
+
   const [search, setSearch] = useState("");
+  const [searchByCNPJ, setSearchByCNPJ] = useState("");
+
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
@@ -36,16 +41,15 @@ export default function Suplier() {
       skip: rowsPerPage * currentPage,
       take: rowsPerPage,
       search,
+      CNPJ: searchByCNPJ,
     });
 
     setData(result);
   };
 
-  console.log(data);
-
   useEffect(() => {
     getData();
-  }, [currentPage, debouncedSearch]);
+  }, [currentPage, search, searchByCNPJ]);
 
   const COLUMNS = [
     {
@@ -103,14 +107,23 @@ export default function Suplier() {
         <Input
           name={"name"}
           placeholder="Digite o nome"
-          onChange={handleChange}
+          onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
           name={"register_employ"}
           placeholder="Digite o CNPJ"
-          onChange={handleChange}
+          onChange={(e) => setInputSearchByCNPJ(e.target.value)}
         />
-        <Button style={ButtonStyle}>Pesquisar</Button>
+        <Button
+          style={ButtonStyle}
+          onClick={() => {
+            if (inputSearch) setSearch(inputSearch);
+            else if (inputSearchByCNPJ) setSearchByCNPJ(inputSearchByCNPJ);
+            else setSearch("");
+          }}
+        >
+          Pesquisar
+        </Button>
         <Button style={ButtonStyle} onClick={() => setIsOpen(true)}>
           Cadastrar
         </Button>

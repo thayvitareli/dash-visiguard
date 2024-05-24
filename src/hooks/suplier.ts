@@ -5,19 +5,21 @@ export const findMany = async ({
   take,
   search,
   toast,
+  CNPJ,
 }: {
   skip: number;
   take: number;
   search?: string;
   toast?: any;
+  CNPJ?: string;
 }) => {
   try {
-    console.log(skip, take);
     const response = await api.get("/suplier", {
       params: {
         skip,
         take,
         search,
+        CNPJ,
       },
     });
 
