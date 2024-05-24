@@ -12,6 +12,7 @@ import {
   ModalBody,
   ModalCloseButton,
   RadioGroup,
+  useToast,
 } from "@chakra-ui/react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { Mask } from "@tboerc/maskfy";
@@ -21,7 +22,7 @@ import Panel from "components/Panel";
 import Table from "components/Table";
 import dayjs from "dayjs";
 import { useFormik } from "formik";
-import { CollaboratorHook, VisitorHook } from "hooks";
+import { VisitorHook } from "hooks";
 import { useEffect, useState } from "react";
 
 export default function Visitor() {
@@ -29,10 +30,12 @@ export default function Visitor() {
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [search, setSearch] = useState("");
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [inputSearch, setInputSearch] = useState("");
   const [inputSearchByRegister, setInputSearchByRegister] = useState("");
+  const [reload, setReload] = useState(false);
+
+  const toast = useToast();
 
   const getData = async () => {
     const result = await VisitorHook.findMany({
@@ -46,7 +49,7 @@ export default function Visitor() {
 
   useEffect(() => {
     getData();
-  }, [currentPage, search]);
+  }, [currentPage, search, reload]);
 
   const COLUMNS = [
     {
@@ -75,7 +78,16 @@ export default function Visitor() {
     },
   ];
 
-  const createVisitor = () => {};
+  //@ts-ignore
+  const createVisitor = async (values) => {
+    const result = await VisitorHook.create(values, toast);
+
+    if (result) {
+      setIsOpen(false);
+      setReload(!reload);
+      resetForm();
+    }
+  };
 
   const INITIAL_VALUES = {
     name: "",
@@ -83,16 +95,11 @@ export default function Visitor() {
     phone: "",
   };
 
-  const { values, handleChange, handleReset, handleSubmit } = useFormik({
-    initialValues: INITIAL_VALUES,
-    onSubmit: createVisitor,
-  });
-
-  console.log(inputSearch);
-
-  console.log(search);
-
-  const onChangeSearch = () => {};
+  const { values, handleChange, handleReset, handleSubmit, resetForm } =
+    useFormik({
+      initialValues: INITIAL_VALUES,
+      onSubmit: createVisitor,
+    });
 
   return (
     <Panel>
@@ -104,11 +111,13 @@ export default function Visitor() {
         <Input
           name={"name"}
           placeholder="Digite o nome"
+          //@ts-ignore
           onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
           name={"register_employ"}
           placeholder="Digite Rg"
+          //@ts-ignore
           onChange={(e) => setInputSearchByRegister(e.target.value)}
         />
         <Button
@@ -138,18 +147,51 @@ export default function Visitor() {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader color={Colors.primary}>
+            Cadastro de Visitante
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input label="Nome" onChange={undefined} />
-            <Input label="Registro" onChange={undefined} />
+            <Flex flexDir={"column"}>
+              <Flex gap={"12px"}>
+                <Input
+                  name="name"
+                  label="Nome"
+                  placeholder="Digite o  nome"
+                  onChange={handleChange}
+                />
+                <Input
+                  name="rg"
+                  label="RG"
+                  placeholder="Digite o RG"
+                  onChange={handleChange}
+                />
+              </Flex>
+              <Flex alignItems={"end"} gap={"12px"}>
+                <Input
+                  name="phone"
+                  label="Telefone"
+                  placeholder="Digite o telefone"
+                  onChange={handleChange}
+                  value={Mask.phone.value(values.phone)}
+                />
+              </Flex>
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => setIsOpen(false)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={(e) => {
+                setIsOpen(false), handleReset(e);
+              }}
+            >
               Cancelar
             </Button>
-            <Button colorScheme="blue">Salvar</Button>
+            <Button colorScheme="blue" onClick={() => handleSubmit()}>
+              Salvar
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

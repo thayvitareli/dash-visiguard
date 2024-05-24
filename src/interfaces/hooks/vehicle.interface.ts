@@ -1,6 +1,6 @@
 export interface CreateVehicle {
-  plate: String;
+  plate: string;
   type: number;
-  brand: String;
-  model: String;
+  brand: string;
+  model: string;
 }
