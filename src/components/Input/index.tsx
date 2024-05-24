@@ -7,6 +7,7 @@ import {
   Flex,
   InputRightElement,
 } from "@chakra-ui/react";
+import { Colors } from "assets/config/theme";
 import { useState } from "react";
 import { GoEye, GoEyeClosed } from "react-icons/go";
 
@@ -27,7 +28,6 @@ const style = {
   borderWidth: 1,
   borderColor: "lightgray",
   borderRadius: 4,
-  width: "90%",
 };
 
 export default function Input({
@@ -73,8 +73,8 @@ export default function Input({
       )}
     </Flex>
   ) : (
-    <Flex direction={"column"} width={"100%"} justifyContent={"center"}>
-      <Text>{label}</Text>
+    <Flex direction={"column"} justifyContent={"center"} width="100%">
+      <Text color={Colors.second}>{label}</Text>
       <InputChakra
         placeholder={placeholder}
         name={name}

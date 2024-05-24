@@ -20,7 +20,14 @@ const Table = ({
   currentPage,
   setCurrentPage,
   totalRows,
-}: any) => {
+}: {
+  columns: any[];
+  rows: any[];
+  rowsPerPage: number | undefined;
+  currentPage: number;
+  setCurrentPage: any;
+  totalRows: number;
+}) => {
   const handleNextPage = () => {
     setCurrentPage((prevPage) =>
       Math.min(prevPage + 1, Math.floor(totalRows / rowsPerPage))

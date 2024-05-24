@@ -1,3 +1,5 @@
+import { Flex, Text } from "@chakra-ui/react";
+import { Colors } from "assets/config/theme";
 import Select from "react-select";
 
 interface SelectProps {
@@ -5,6 +7,8 @@ interface SelectProps {
   placeholder?: string;
   onChange: any;
   name?: string;
+  label?: string;
+  borderColor?: string;
 }
 
 export default function SelectData({
@@ -12,13 +16,18 @@ export default function SelectData({
   placeholder,
   onChange,
   name,
+  label,
+  borderColor,
 }: SelectProps) {
   return (
-    <Select
-      placeholder={placeholder}
-      onChange={onChange}
-      name={name}
-      options={options}
-    />
+    <Flex direction={"column"} width={"100%"} justifyContent={"center"}>
+      <Text color={Colors.second}>{label}</Text>
+      <Select
+        placeholder={placeholder}
+        onChange={onChange}
+        name={name}
+        options={options}
+      />
+    </Flex>
   );
 }
