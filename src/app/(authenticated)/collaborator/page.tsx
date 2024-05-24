@@ -37,6 +37,7 @@ export default function Collaborator() {
   const [isOpen, setIsOpen] = useState(false);
   const [inputSearch, setInputSearch] = useState("");
   const [inputSearchByRegister, setInputSearchByRegister] = useState("");
+  const [reload, setReload] = useState(false);
 
   const toast = useToast();
 
@@ -52,7 +53,7 @@ export default function Collaborator() {
 
   useEffect(() => {
     getData();
-  }, [currentPage, search]);
+  }, [currentPage, search, reload]);
 
   //@ts-ignore
   const createCollaborator = async (values) => {
@@ -60,6 +61,7 @@ export default function Collaborator() {
 
     if (result) {
       setIsOpen(false);
+      setReload(!reload);
     }
   };
 

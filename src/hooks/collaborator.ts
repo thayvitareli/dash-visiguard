@@ -33,7 +33,7 @@ export const create = async (
 
     toast({
       title: "Sucesso!",
-      description: "Colaborador criado com sucesso",
+      description: "Colaborador cadastrado com sucesso",
       status: "success",
       duration: 9000,
       isClosable: true,
