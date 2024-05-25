@@ -103,15 +103,17 @@ export default function Suplier() {
         Área de Prestadores de Serviço
       </Text>
 
-      <Flex justifyContent="space-between" alignItems={"center"} gap={5}>
+      <Flex justifyContent="space-between" alignItems={"initial"} gap={5}>
         <Input
           name={"name"}
           placeholder="Digite o nome"
+          //@ts-ignore
           onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
           name={"register_employ"}
           placeholder="Digite o CNPJ"
+          //@ts-ignore
           onChange={(e) => setInputSearchByCNPJ(e.target.value)}
         />
         <Button

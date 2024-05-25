@@ -74,12 +74,7 @@ export default function Input({
       )}
     </Flex>
   ) : (
-    <Flex
-      direction={"column"}
-      justifyContent={"center"}
-      width="100%"
-      bgColor={"yellow"}
-    >
+    <Flex direction={"column"} justifyContent={"center"} width="100%">
       <Text color={Colors.second}>{label}</Text>
       <InputChakra
         placeholder={placeholder}

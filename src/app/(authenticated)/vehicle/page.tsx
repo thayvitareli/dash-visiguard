@@ -126,7 +126,12 @@ export default function Vehicle() {
       <Text fontSize={TextSize.heading} color={Colors.primary}>
         Área de Veículos
       </Text>
-      <SimpleGrid columns={{ base: 1, md: 4 }} alignItems={"center"} gap={5}>
+      <SimpleGrid
+        columns={{ base: 1, md: 4 }}
+        alignItems={"initial"}
+        gap={5}
+        bgColor={"yellow"}
+      >
         <GridItem colSpan={2}>
           <Input
             name={"plate"}

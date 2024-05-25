@@ -107,7 +107,7 @@ export default function Visitor() {
         Área de Visitantes
       </Text>
 
-      <Flex justifyContent="space-between" alignItems={"center"} gap={5}>
+      <Flex justifyContent="space-between" alignItems={"initial"} gap={5}>
         <Input
           name={"name"}
           placeholder="Digite o nome"

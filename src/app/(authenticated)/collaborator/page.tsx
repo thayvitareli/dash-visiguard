@@ -124,7 +124,7 @@ export default function Collaborator() {
         Área de Colaboradores
       </Text>
 
-      <Flex justifyContent="space-between" alignItems={"center"} gap={5}>
+      <Flex justifyContent="space-between" alignItems={"initial"} gap={5}>
         <Input
           name={"name"}
           placeholder="Digite o nome"

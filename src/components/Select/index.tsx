@@ -25,9 +25,11 @@ export default function SelectData({
 }: SelectProps) {
   return (
     <Flex direction={"column"} width={"100%"} justifyContent={"center"}>
-      <Text color={Colors.second} mb={2}>
-        {label}
-      </Text>
+      {label && (
+        <Text color={Colors.second} mb={2}>
+          {label}
+        </Text>
+      )}
       <Select
         placeholder={placeholder}
         onChange={onChange}
