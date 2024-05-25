@@ -21,7 +21,7 @@ import Table from "components/Table";
 import { useFormik } from "formik";
 import { SuplierHook } from "hooks";
 import { useEffect, useState } from "react";
-import { FaIcons } from "react-icons/fa";
+import * as Yup from "yup";
 
 export default function Suplier() {
   const [data, setData] = useState([] as any);
@@ -81,21 +81,20 @@ export default function Suplier() {
     },
   ];
 
-  const createCollaborator = () => {};
+  const createSuplier = () => {};
 
   const INITIAL_VALUES = {
     name: "",
     CNPJ: "",
-    position: "",
-    department: "",
+    phone: "",
   };
 
-  const { values, handleChange, handleReset, handleSubmit } = useFormik({
-    initialValues: INITIAL_VALUES,
-    onSubmit: createCollaborator,
-  });
-
-  const onChangeSearch = () => {};
+  const { values, handleChange, handleReset, handleSubmit, errors, touched } =
+    useFormik({
+      initialValues: INITIAL_VALUES,
+      onSubmit: createSuplier,
+      validationSchema,
+    });
 
   return (
     <Panel>
@@ -143,21 +142,66 @@ export default function Suplier() {
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader color={Colors.primary}>
+            Cadastro de fornecedor
+          </ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input label="Nome" onChange={undefined} />
-            <Input label="CNPJ" onChange={undefined} />
+            <Flex flexDir={"column"}>
+              <Flex gap={"12px"}>
+                <Input
+                  name="name"
+                  label="Nome"
+                  placeholder="Digite o nome"
+                  onChange={handleChange}
+                  error={errors.name}
+                  touched={touched.name}
+                />
+                <Input
+                  name="CNPJ"
+                  label="CNPJ"
+                  placeholder="Digite o CNPJ"
+                  onChange={handleChange}
+                  error={errors.CNPJ}
+                  touched={touched.CNPJ}
+                />
+              </Flex>
+              <Flex alignItems={"end"} gap={"12px"}>
+                <Input
+                  name="phone"
+                  label="Telefone"
+                  placeholder="Digite o telefone"
+                  onChange={handleChange}
+                  value={Mask.phone.value(values.phone)}
+                  error={errors.phone}
+                  touched={touched.phone}
+                />
+              </Flex>
+            </Flex>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={() => setIsOpen(false)}>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={(e) => {
+                setIsOpen(false), handleReset(e);
+              }}
+            >
               Cancelar
             </Button>
-            <Button colorScheme="blue">Salvar</Button>
+            <Button colorScheme="blue" onClick={() => handleSubmit()}>
+              Salvar
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </Panel>
   );
 }
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Campo obrigatório"),
+  CNPJ: Yup.string().required("Campo obrigatório"),
+  phone: Yup.number().required("Campo obrigatório"),
+});

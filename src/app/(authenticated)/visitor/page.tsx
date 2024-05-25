@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { VisitorHook } from "hooks";
 import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
 export default function Visitor() {
   const [data, setData] = useState([] as any);
@@ -95,11 +96,19 @@ export default function Visitor() {
     phone: "",
   };
 
-  const { values, handleChange, handleReset, handleSubmit, resetForm } =
-    useFormik({
-      initialValues: INITIAL_VALUES,
-      onSubmit: createVisitor,
-    });
+  const {
+    values,
+    handleChange,
+    handleReset,
+    handleSubmit,
+    resetForm,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: INITIAL_VALUES,
+    onSubmit: createVisitor,
+    validationSchema,
+  });
 
   return (
     <Panel>
@@ -115,7 +124,7 @@ export default function Visitor() {
           onChange={(e) => setInputSearch(e.target.value)}
         />
         <Input
-          name={"register_employ"}
+          name={"rg"}
           placeholder="Digite Rg"
           //@ts-ignore
           onChange={(e) => setInputSearchByRegister(e.target.value)}
@@ -159,12 +168,16 @@ export default function Visitor() {
                   label="Nome"
                   placeholder="Digite o  nome"
                   onChange={handleChange}
+                  error={errors.name}
+                  touched={touched.name}
                 />
                 <Input
                   name="rg"
                   label="RG"
                   placeholder="Digite o RG"
                   onChange={handleChange}
+                  error={errors.rg}
+                  touched={touched.rg}
                 />
               </Flex>
               <Flex alignItems={"end"} gap={"12px"}>
@@ -174,6 +187,8 @@ export default function Visitor() {
                   placeholder="Digite o telefone"
                   onChange={handleChange}
                   value={Mask.phone.value(values.phone)}
+                  error={errors.phone}
+                  touched={touched.phone}
                 />
               </Flex>
             </Flex>
@@ -198,3 +213,9 @@ export default function Visitor() {
     </Panel>
   );
 }
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Campo obrigatório"),
+  rg: Yup.string().required("Campo obrigatório"),
+  phone: Yup.number().required("Campo obrigatório"),
+});

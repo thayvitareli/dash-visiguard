@@ -28,6 +28,7 @@ import dayjs from "dayjs";
 import { useFormik } from "formik";
 import { CollaboratorHook } from "hooks";
 import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
 export default function Collaborator() {
   const [data, setData] = useState([] as any);
@@ -72,11 +73,19 @@ export default function Collaborator() {
     departament: "",
   };
 
-  const { values, handleChange, handleReset, handleSubmit, setFieldValue } =
-    useFormik({
-      initialValues: INITIAL_VALUES,
-      onSubmit: createCollaborator,
-    });
+  const {
+    values,
+    handleChange,
+    handleReset,
+    handleSubmit,
+    setFieldValue,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: INITIAL_VALUES,
+    onSubmit: createCollaborator,
+    validationSchema,
+  });
 
   const COLUMNS = [
     {
@@ -177,6 +186,8 @@ export default function Collaborator() {
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite o nome"
+                  error={errors.name}
+                  touched={touched.name}
                 />
                 <Input
                   name="register_employee"
@@ -184,6 +195,8 @@ export default function Collaborator() {
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite o número de registro"
+                  error={errors.register_employee}
+                  touched={touched.register_employee}
                 />
               </Flex>
               <Flex gap="12px">
@@ -197,6 +210,8 @@ export default function Collaborator() {
                   label="cargo"
                   borderColor={Colors.second}
                   placeholder="Selecione o cargo"
+                  error={errors.position}
+                  touched={touched.position}
                 />
                 <SelectData
                   name="departament"
@@ -206,6 +221,8 @@ export default function Collaborator() {
                   label="setor"
                   borderColor={Colors.second}
                   placeholder="Digite o setor"
+                  error={errors.departament}
+                  touched={touched.departament}
                 />
               </Flex>
             </Flex>
@@ -230,3 +247,10 @@ export default function Collaborator() {
     </Panel>
   );
 }
+
+const validationSchema = Yup.object().shape({
+  name: Yup.string().required("Campo obrigatório"),
+  register_employee: Yup.string().required("Campo obrigatório"),
+  position: Yup.number().required("Seleção obrigatória"),
+  departament: Yup.number().required("Seleção obrigatória"),
+});
