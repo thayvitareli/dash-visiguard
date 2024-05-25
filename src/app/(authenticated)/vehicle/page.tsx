@@ -26,6 +26,7 @@ import Table from "components/Table";
 import { useFormik } from "formik";
 import { VehicleHook } from "hooks";
 import { useEffect, useState } from "react";
+import * as Yup from "yup";
 
 export default function Vehicle() {
   const [data, setData] = useState([] as any);
@@ -97,6 +98,7 @@ export default function Vehicle() {
 
   //@ts-ignore
   const createVehicle = async (values) => {
+    console.log("submit");
     const result = await VehicleHook.create(values, toast);
 
     if (result) {
@@ -105,11 +107,19 @@ export default function Vehicle() {
     }
   };
 
-  const { values, handleChange, handleReset, handleSubmit, setFieldValue } =
-    useFormik({
-      initialValues: INITIAL_VALUES,
-      onSubmit: createVehicle,
-    });
+  const {
+    values,
+    handleChange,
+    handleReset,
+    handleSubmit,
+    setFieldValue,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: INITIAL_VALUES,
+    onSubmit: createVehicle,
+    validationSchema,
+  });
 
   return (
     <Panel>
@@ -167,7 +177,7 @@ export default function Vehicle() {
           <ModalHeader color={Colors.primary}>Cadastro de Veículo</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Flex flexDir={"column"}>
+            <Flex flexDir={"column"} gap={"12px"}>
               <Flex gap="12px">
                 <Input
                   name="plate"
@@ -175,6 +185,8 @@ export default function Vehicle() {
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite a placa"
+                  error={errors.plate}
+                  touched={touched.plate}
                 />
                 <SelectData
                   label="Tipo"
@@ -185,6 +197,8 @@ export default function Vehicle() {
                   name="type"
                   placeholder="Selecione o tipo"
                   options={VehicleTypesOptions}
+                  error={errors.type}
+                  touched={touched.type}
                 />
               </Flex>
               <Flex gap="12px">
@@ -194,6 +208,8 @@ export default function Vehicle() {
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite a marca"
+                  error={errors.brand}
+                  touched={touched.brand}
                 />
                 <Input
                   name="model"
@@ -201,6 +217,8 @@ export default function Vehicle() {
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite o modelo"
+                  error={errors.model}
+                  touched={touched.model}
                 />
               </Flex>
             </Flex>
@@ -225,3 +243,10 @@ export default function Vehicle() {
     </Panel>
   );
 }
+
+const validationSchema = Yup.object().shape({
+  plate: Yup.string().required("Campo obrigatório"),
+  brand: Yup.string().required("Campo obrigatório"),
+  type: Yup.number().required("Campo obrigatório"),
+  model: Yup.string().required("Campo obrigatório"),
+});
