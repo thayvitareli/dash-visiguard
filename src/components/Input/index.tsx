@@ -6,6 +6,7 @@ import {
   Button,
   Flex,
   InputRightElement,
+  Box,
 } from "@chakra-ui/react";
 import { Colors } from "assets/config/theme";
 import { useState } from "react";
@@ -73,7 +74,12 @@ export default function Input({
       )}
     </Flex>
   ) : (
-    <Flex direction={"column"} justifyContent={"center"} width="100%">
+    <Flex
+      direction={"column"}
+      justifyContent={"center"}
+      width="100%"
+      bgColor={"yellow"}
+    >
       <Text color={Colors.second}>{label}</Text>
       <InputChakra
         placeholder={placeholder}
@@ -85,11 +91,9 @@ export default function Input({
         value={value}
         borderColor={borderColor}
       />
-      {error && touched && (
-        <Text color={"red"} mt={2}>
-          {error}
-        </Text>
-      )}
+      <Box h={"30px"}>
+        {error && touched && <Text color={"red"}>{error}</Text>}
+      </Box>
     </Flex>
   );
 }
