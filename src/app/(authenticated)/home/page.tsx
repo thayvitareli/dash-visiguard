@@ -7,11 +7,24 @@ import { FaIcons } from "react-icons/fa";
 import { useFormik } from "formik";
 import Input from "components/Input";
 import Panel from "components/Panel";
+import { findMany } from "hooks/check";
 
 export default function Home() {
   const [currentPage, setCurrentPage] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [data, setData]=useState([])
 
+  const getChecks = async () => {
+    const result = await findMany({})
+
+    setData(result)
+  }
+
+  useEffect(() => {
+    getChecks()
+  },[])
+
+  console.log(data)
   const COLUMNS = [
     {
       Header: "Nome",
@@ -25,28 +38,28 @@ export default function Home() {
     },
     {
       Header: "Tipo",
-      accessor: "type",
+      accessor: "fk",
       Cell: ({ row }: { row: any }) => <Text>{row?.type}</Text>,
     },
     {
       Header: "Placa veículo",
       accessor: "plate",
-      Cell: ({ row }: { row: any }) => <Text>{row?.type}</Text>,
+      Cell: ({ row }: { row: any }) => <Text>{row?.plate}</Text>,
     },
     {
       Header: "Hora Entrada",
-      accessor: "plate",
-      Cell: ({ row }: { row: any }) => <Text>{row?.type}</Text>,
+      accessor: "date_check_in",
+      Cell: ({ row }: { row: any }) => <Text>{row?.date_check_in}</Text>,
     },
     {
       Header: "Hora Saída",
-      accessor: "plate",
+      accessor: "date_check_out",
       Cell: ({ row }: { row: any }) => <Text>{row?.type}</Text>,
     },
     {
       Header: "Registrar saida",
       Cell: ({ row }: { row: any }) => (
-        <Button onClick={() => console.log(row?.name)}>Registrar saída</Button>
+        <Button onClick={() => console.log('Linha',row)}>Registrar saída</Button>
       ),
     },
   ];
@@ -82,7 +95,7 @@ export default function Home() {
 
       <Table
         columns={COLUMNS}
-        rows={[]}
+        rows={data}
         rowsPerPage={5}
         currentPage={0}
         setCurrentPage={undefined}
