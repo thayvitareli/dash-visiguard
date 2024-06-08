@@ -18,7 +18,7 @@ import {
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 import { VehicleTypesOptions } from "assets/config/vehicle";
-import { VehicleTypes } from "assets/config/vehicle.type.common";
+import { VehicleTypes } from "assets/config/vehicle/vehicle.type.common";
 import Input from "components/Input";
 import Panel from "components/Panel";
 import SelectData from "components/Select";
@@ -126,12 +126,7 @@ export default function Vehicle() {
       <Text fontSize={TextSize.heading} color={Colors.primary}>
         Área de Veículos
       </Text>
-      <SimpleGrid
-        columns={{ base: 1, md: 4 }}
-        alignItems={"initial"}
-        gap={5}
-        bgColor={"yellow"}
-      >
+      <SimpleGrid columns={{ base: 1, md: 4 }} alignItems={"initial"} gap={5}>
         <GridItem colSpan={2}>
           <Input
             name={"plate"}
@@ -186,7 +181,7 @@ export default function Vehicle() {
               <Flex gap="12px">
                 <Input
                   name="plate"
-                  label="Nome"
+                  label="Placa"
                   onChange={handleChange}
                   borderColor={Colors.second}
                   placeholder="Digite a placa"

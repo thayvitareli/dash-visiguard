@@ -50,3 +50,32 @@ export const registerCheckOut = async (data: any, toast: any) => {
     });
   }
 };
+
+export const registerCheckIn = async (data: any, toast: any) => {
+  try {
+    const { data: response } = await api.post(`/check-in-out`, data);
+
+    console.log("Response", response);
+    if (response) {
+      toast({
+        title: "Sucesso!",
+        description: "Entrada registrada com sucesso.",
+        status: "success",
+        duration: 3000,
+        isClosable: true,
+      });
+    }
+
+    return response;
+  } catch (error: any) {
+    console.log(error);
+    toast({
+      title: "Erro!",
+      description:
+        error?.response?.data?.message || "Tente novamente mais tarde",
+      status: "error",
+      duration: 3000,
+      isClosable: true,
+    });
+  }
+};

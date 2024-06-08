@@ -81,7 +81,8 @@ export default function Visitor() {
 
   //@ts-ignore
   const createVisitor = async (values) => {
-    const result = await VisitorHook.create(values, toast);
+    const rg = values.rg.replace(/[.-]/g, "");
+    const result = await VisitorHook.create({ ...values, rg }, toast);
 
     if (result) {
       setIsOpen(false);
@@ -186,7 +187,7 @@ export default function Visitor() {
                   label="Telefone"
                   placeholder="Digite o telefone"
                   onChange={handleChange}
-                  value={Mask.phone.value(values.phone)}
+                  value={values.phone}
                   error={errors.phone}
                   touched={touched.phone}
                 />
@@ -217,5 +218,5 @@ export default function Visitor() {
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Campo obrigatório"),
   rg: Yup.string().required("Campo obrigatório"),
-  phone: Yup.number().required("Campo obrigatório"),
+  phone: Yup.string().required("Campo obrigatório"),
 });
