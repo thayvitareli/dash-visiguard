@@ -1,6 +1,5 @@
 "use client";
-import React, { useEffect, useState } from "react";
-import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+
 import {
   Button,
   Flex,
@@ -24,25 +23,36 @@ import {
   Radio,
   RadioGroup,
 } from "@chakra-ui/react";
-import Table from "components/Table";
+import dayjs from "dayjs";
 import { useFormik } from "formik";
+import React, { useEffect, useState } from "react";
+
+import Table from "components/Table";
 import Input from "components/Input";
 import Panel from "components/Panel";
-import { findMany } from "hooks/check";
-import dayjs from "dayjs";
-import { CheckHook, CollaboratorHook, SuplierHook, VisitorHook } from "hooks";
-import { TypeCheckCommon } from "assets/config/typeChecksCommon";
 import SelectAsync from "components/SelectAsync";
 
+import { findMany } from "hooks/check";
+import { CheckHook, CollaboratorHook, SuplierHook, VisitorHook } from "hooks";
+
+import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+import { TypeCheckCommon } from "assets/config/typeChecksCommon";
+
+import iCreateCheckIn from "interfaces/hooks/check-in.interface";
+
 export default function Home() {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [data, setData] = useState([]);
-  const [selectedRegister, setSelectedRegister] = useState(null);
-  const [isAlertOpen, setIsAlertOpen] = useState(false);
-  const [refresh, setRefresh] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(1000);
+  const [search, setSearch] = useState("");
+
   const [selectedValue, setSelectedValue] = useState("1");
-  const [searchSelect, setSearchSelect] = useState("");
+  const [selectedRegister, setSelectedRegister] = useState(null);
+
+  const [isAlertOpen, setIsAlertOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const [refresh, setRefresh] = useState(false);
 
   const cancelRef = React.useRef();
 
@@ -56,7 +66,7 @@ export default function Home() {
 
   useEffect(() => {
     getChecks();
-  }, [refresh]);
+  }, [refresh, currentPage, search]);
 
   const checkRegisterType = (register: any) => {
     if (register.visitor_id) return 1;
@@ -69,8 +79,7 @@ export default function Home() {
     setFieldValue("type", Number(value));
   };
 
-  async function findSupliers(value) {
-    console.log(value);
+  async function findSupliers(value: string) {
     const response = await SuplierHook.findMany({
       skip: 0,
       take: 10,
@@ -87,7 +96,7 @@ export default function Home() {
     return options;
   }
 
-  async function findCollaborators(value) {
+  async function findCollaborators(value: string) {
     const response = await CollaboratorHook.findMany({
       skip: 0,
       take: 15,
@@ -104,7 +113,7 @@ export default function Home() {
     return options;
   }
 
-  async function findVisitors(value) {
+  async function findVisitors(value: string) {
     const response = await VisitorHook.findMany({
       skip: 0,
       take: 15,
@@ -134,7 +143,7 @@ export default function Home() {
     setIsAlertOpen(false);
   };
 
-  const registerCheckIn = async (values) => {
+  const registerCheckIn = async (values: iCreateCheckIn) => {
     switch (values.type) {
       case 1:
         delete values["suplier_id"];
@@ -165,6 +174,8 @@ export default function Home() {
         plate: "",
         type: 1,
         suplier_id: "",
+        collaborator_id: "",
+        visitor_id: "",
       },
       onSubmit: registerCheckIn,
     });
@@ -264,10 +275,10 @@ export default function Home() {
       <Table
         columns={COLUMNS}
         rows={data}
-        rowsPerPage={5}
-        currentPage={0}
-        setCurrentPage={undefined}
-        totalRows={1}
+        rowsPerPage={rowsPerPage}
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        totalRows={data.length}
       />
 
       <AlertDialog
@@ -332,7 +343,7 @@ export default function Home() {
                     label="Selecione um colaborador"
                     name="name"
                     loadOptions={findCollaborators}
-                    onChange={(option) =>
+                    onChange={(option: { label: string; value: string }) =>
                       setFieldValue("collaborator_id", option.value)
                     }
                     placeholder="Busque pelo nome"
@@ -362,12 +373,13 @@ export default function Home() {
                 onChange={handleChange}
                 borderColor={Colors.second}
                 placeholder="Digite a placa"
+                value={values.plate}
               />
               {selectedValue == TypeCheckCommon.suplier.toString() ? (
                 <SelectAsync
                   label="Selecione a empresa"
                   loadOptions={findSupliers}
-                  onChange={(option) =>
+                  onChange={(option: { label: string; value: string }) =>
                     setFieldValue("suplier_id", option.value)
                   }
                   placeholder="Busque pelo nome da empresa"

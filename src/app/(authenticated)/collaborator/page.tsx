@@ -13,30 +13,36 @@ import {
   ModalCloseButton,
   useToast,
 } from "@chakra-ui/react";
+import dayjs from "dayjs";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { useEffect, useState } from "react";
+
 import {
   DepartamentsOptions,
   PositionsOptions,
 } from "assets/config/company-departaments";
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+
 import Input from "components/Input";
 import Panel from "components/Panel";
-import SelectData from "components/Select";
 import Table from "components/Table";
-import dayjs from "dayjs";
-import { useFormik } from "formik";
+import SelectData from "components/Select";
+
 import { CollaboratorHook } from "hooks";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
 
 export default function Collaborator() {
   const [data, setData] = useState([] as any);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [search, setSearch] = useState("");
-  const [isOpen, setIsOpen] = useState(false);
   const [inputSearch, setInputSearch] = useState("");
   const [inputSearchByRegister, setInputSearchByRegister] = useState("");
+
+  const [isOpen, setIsOpen] = useState(false);
   const [reload, setReload] = useState(false);
 
   const toast = useToast();

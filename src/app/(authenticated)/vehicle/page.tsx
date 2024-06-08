@@ -15,26 +15,32 @@ import {
   Text,
   useToast,
 } from "@chakra-ui/react";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+import { useEffect, useState } from "react";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
-import { VehicleTypesOptions } from "assets/config/vehicle";
-import { VehicleTypes } from "assets/config/vehicle/vehicle.type.common";
+
 import Input from "components/Input";
 import Panel from "components/Panel";
-import SelectData from "components/Select";
 import Table from "components/Table";
-import { useFormik } from "formik";
+import SelectData from "components/Select";
+
 import { VehicleHook } from "hooks";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
+
+import { VehicleTypesOptions } from "assets/config/vehicle";
+import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+import { VehicleTypes } from "assets/config/vehicle/vehicle.type.common";
 
 export default function Vehicle() {
   const [data, setData] = useState([] as any);
   const [search, setSearch] = useState([] as any);
+  const [searchByType, setSearchByType] = useState(null);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [isOpen, setIsOpen] = useState(false);
-  const [searchByType, setSearchByType] = useState(null);
+
   const [reload, setReload] = useState(false);
 
   const toast = useToast();

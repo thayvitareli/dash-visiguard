@@ -12,21 +12,26 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import * as Yup from "yup";
+import { useFormik } from "formik";
 import { Mask } from "@tboerc/maskfy";
-import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+import { useEffect, useState } from "react";
+import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+
 import Input from "components/Input";
 import Panel from "components/Panel";
 import Table from "components/Table";
-import { useFormik } from "formik";
+
 import { SuplierHook } from "hooks";
-import { useEffect, useState } from "react";
-import * as Yup from "yup";
+
+import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 
 export default function Suplier() {
   const [data, setData] = useState([] as any);
+
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+
   const [inputSearch, setInputSearch] = useState("");
   const [inputSearchByCNPJ, setInputSearchByCNPJ] = useState("");
 

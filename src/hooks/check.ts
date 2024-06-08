@@ -1,3 +1,4 @@
+import iCreateCheckIn from "interfaces/hooks/check-in.interface";
 import api from "services/api";
 
 export const findMany = async ({
@@ -51,7 +52,7 @@ export const registerCheckOut = async (data: any, toast: any) => {
   }
 };
 
-export const registerCheckIn = async (data: any, toast: any) => {
+export const registerCheckIn = async (data: iCreateCheckIn, toast: any) => {
   try {
     const { data: response } = await api.post(`/check-in-out`, data);
 
