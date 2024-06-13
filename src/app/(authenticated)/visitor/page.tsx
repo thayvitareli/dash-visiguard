@@ -27,9 +27,10 @@ import Table from "components/Table";
 import { VisitorHook } from "hooks";
 
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+import { iVisitor } from "interfaces/hooks";
 
 export default function Visitor() {
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState<iVisitor.APIFindMany>();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -154,11 +155,11 @@ export default function Visitor() {
 
       <Table
         columns={COLUMNS}
-        rows={data.records}
+        rows={data?.records || []}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalRows={data.total}
+        totalRows={data?.total ?? 1}
       />
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>
