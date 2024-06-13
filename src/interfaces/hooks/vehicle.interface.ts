@@ -1,4 +1,3 @@
-import { APIFindMany } from "./collaborator.interface";
 export interface CreateVehicle {
   plate: string;
   type: number;

@@ -61,6 +61,7 @@ export default function Input({
             size="sm"
             onClick={() => setShow(!show)}
             backgroundColor={"transparent"}
+            //@ts-ignore
             _hover={"none"}
           >
             {show ? <Icon as={GoEyeClosed} /> : <Icon as={GoEye} />}

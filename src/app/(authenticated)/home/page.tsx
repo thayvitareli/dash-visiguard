@@ -47,7 +47,7 @@ export default function Home() {
   const [search, setSearch] = useState("");
 
   const [selectedValue, setSelectedValue] = useState(1);
-  const [selectedRegister, setSelectedRegister] = useState(null);
+  const [selectedRegister, setSelectedRegister] = useState<any>(null);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,7 +86,7 @@ export default function Home() {
       search: value,
     });
 
-    const options = response.records?.map((record) => {
+    const options = response.records?.map((record: any) => {
       return {
         value: record.id,
         label: record.name,
@@ -103,7 +103,7 @@ export default function Home() {
       search: value,
     });
 
-    const options = response.record?.map((record) => {
+    const options = response.record?.map((record: any) => {
       return {
         value: record.id,
         label: record.name,
@@ -120,7 +120,7 @@ export default function Home() {
       search: value,
     });
 
-    const options = response.record?.map((record) => {
+    const options = response.record?.map((record: any) => {
       return {
         value: record.id,
         label: record.name,
@@ -167,10 +167,8 @@ export default function Home() {
   };
 
   const handleFilterBySearch = () => {
-    const result = data.filter((value) => value?.name?.contains(search));
-
-    console.log(result);
-
+    // const result = data.filter((value: any) => value?.name?.contains(search));
+    // console.log(result);
     // setData(result);
   };
 

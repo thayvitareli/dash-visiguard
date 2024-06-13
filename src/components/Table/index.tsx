@@ -23,19 +23,19 @@ const Table = ({
 }: {
   columns: any[];
   rows: any[];
-  rowsPerPage: number | undefined;
+  rowsPerPage: number;
   currentPage: number;
   setCurrentPage: any;
   totalRows: number;
 }) => {
   const handleNextPage = () => {
-    setCurrentPage((prevPage) =>
+    setCurrentPage((prevPage: any) =>
       Math.min(prevPage + 1, Math.floor(totalRows / rowsPerPage))
     );
   };
 
   const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(prevPage - 1, 0));
+    setCurrentPage((prevPage: any) => Math.max(prevPage - 1, 0));
   };
 
   return (
