@@ -7,7 +7,7 @@ export interface CreateCollaborator {
 
 export interface APIFindMany {
   total: number;
-  record: Record[];
+  records: Record[];
 }
 
 export interface Record {

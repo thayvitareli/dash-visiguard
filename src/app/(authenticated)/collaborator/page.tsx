@@ -169,7 +169,7 @@ export default function Collaborator() {
 
       <Table
         columns={COLUMNS}
-        rows={data?.record || []}
+        rows={data?.records || []}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}

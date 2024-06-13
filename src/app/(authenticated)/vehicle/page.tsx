@@ -30,9 +30,10 @@ import { VehicleHook } from "hooks";
 import { VehicleTypesOptions } from "assets/config/vehicle";
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 import { VehicleTypes } from "assets/config/vehicle/vehicle.type.common";
+import { iVehicle } from "interfaces/hooks";
 
 export default function Vehicle() {
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState<iVehicle.APIFindMany>();
   const [search, setSearch] = useState([] as any);
   const [searchByType, setSearchByType] = useState(null);
 
@@ -174,7 +175,7 @@ export default function Vehicle() {
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalRows={data?.total}
+        totalRows={data?.total ?? 1}
       />
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size={"xl"}>
