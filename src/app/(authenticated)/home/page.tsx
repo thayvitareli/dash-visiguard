@@ -46,7 +46,7 @@ export default function Home() {
   const [rowsPerPage, setRowsPerPage] = useState(1000);
   const [search, setSearch] = useState("");
 
-  const [selectedValue, setSelectedValue] = useState("1");
+  const [selectedValue, setSelectedValue] = useState(1);
   const [selectedRegister, setSelectedRegister] = useState(null);
 
   const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -75,7 +75,7 @@ export default function Home() {
   };
 
   const handleRadioChange = (value: string) => {
-    setSelectedValue(value);
+    setSelectedValue(Number(value));
     setFieldValue("type", Number(value));
   };
 
@@ -166,6 +166,14 @@ export default function Home() {
     setIsModalOpen(false);
   };
 
+  const handleFilterBySearch = () => {
+    const result = data.filter((value) => value?.name?.contains(search));
+
+    console.log(result);
+
+    // setData(result);
+  };
+
   const { values, handleChange, handleSubmit, handleReset, setFieldValue } =
     useFormik({
       initialValues: {
@@ -250,14 +258,16 @@ export default function Home() {
         <Input
           name={"name"}
           placeholder="Digite o nome"
-          onChange={handleChange}
+          onChange={(value: string) => setSearch(value)}
         />
         <Input
           name={"document"}
-          placeholder="Digite o Rg"
-          onChange={handleChange}
+          placeholder="Digite o Documento"
+          onChange={(value: string) => setSearch(value)}
         />
-        <Button style={ButtonStyle}>Pesquisar</Button>
+        <Button style={ButtonStyle} onClick={handleFilterBySearch}>
+          Pesquisar
+        </Button>
         <Button
           style={{ ...ButtonStyle, width: 350 }}
           onClick={() => setIsModalOpen(true)}
@@ -321,7 +331,7 @@ export default function Home() {
           <ModalBody>
             <Flex flexDir={"column"}>
               <RadioGroup
-                value={selectedValue}
+                value={selectedValue.toString()}
                 name="type"
                 onChange={handleRadioChange}
               >
@@ -338,7 +348,7 @@ export default function Home() {
                 </Stack>
               </RadioGroup>
               <Flex gap="12px" mt="15px">
-                {selectedValue === TypeCheckCommon.collaborator.toString() ? (
+                {selectedValue === TypeCheckCommon.collaborator ? (
                   <SelectAsync
                     label="Selecione um colaborador"
                     name="name"
@@ -375,7 +385,7 @@ export default function Home() {
                 placeholder="Digite a placa"
                 value={values.plate}
               />
-              {selectedValue == TypeCheckCommon.suplier.toString() ? (
+              {selectedValue == TypeCheckCommon.suplier ? (
                 <SelectAsync
                   label="Selecione a empresa"
                   loadOptions={findSupliers}

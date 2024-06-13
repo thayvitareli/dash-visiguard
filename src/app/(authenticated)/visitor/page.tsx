@@ -87,7 +87,8 @@ export default function Visitor() {
   //@ts-ignore
   const createVisitor = async (values) => {
     const rg = values.rg.replace(/[.-]/g, "");
-    const result = await VisitorHook.create({ ...values, rg }, toast);
+    const phone = Mask.phone.raw(values.phone);
+    const result = await VisitorHook.create({ ...values, rg, phone }, toast);
 
     if (result) {
       setIsOpen(false);
@@ -107,6 +108,7 @@ export default function Visitor() {
     handleChange,
     handleReset,
     handleSubmit,
+    setFieldValue,
     resetForm,
     errors,
     touched,
@@ -191,7 +193,9 @@ export default function Visitor() {
                   name="phone"
                   label="Telefone"
                   placeholder="Digite o telefone"
-                  onChange={handleChange}
+                  onChange={(e: any) =>
+                    setFieldValue("phone", Mask.phone.value(e.target.value))
+                  }
                   value={values.phone}
                   error={errors.phone}
                   touched={touched.phone}

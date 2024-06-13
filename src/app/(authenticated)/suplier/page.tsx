@@ -11,6 +11,8 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
+  useTab,
+  useToast,
 } from "@chakra-ui/react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
@@ -25,6 +27,7 @@ import Table from "components/Table";
 import { SuplierHook } from "hooks";
 
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
+import { iSuplier } from "interfaces/hooks";
 
 export default function Suplier() {
   const [data, setData] = useState([] as any);
@@ -38,8 +41,10 @@ export default function Suplier() {
   const [search, setSearch] = useState("");
   const [searchByCNPJ, setSearchByCNPJ] = useState("");
 
-  const [debouncedSearch, setDebouncedSearch] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [refresh, setRefresh] = useState(false);
+
+  const toast = useToast();
 
   const getData = async () => {
     const result = await SuplierHook.findMany({
@@ -54,7 +59,7 @@ export default function Suplier() {
 
   useEffect(() => {
     getData();
-  }, [currentPage, search, searchByCNPJ]);
+  }, [currentPage, search, searchByCNPJ, refresh]);
 
   const COLUMNS = [
     {
@@ -86,7 +91,17 @@ export default function Suplier() {
     },
   ];
 
-  const createSuplier = () => {};
+  const createSuplier = async (values: iSuplier.CreateSuplier) => {
+    const CNPJ = Mask.cnpj.raw(values.CNPJ);
+    const phone = Mask.phone.raw(values.phone);
+
+    const result = await SuplierHook.create({ ...values, CNPJ, phone }, toast);
+
+    if (result) {
+      setRefresh(!refresh);
+      setIsOpen(false);
+    }
+  };
 
   const INITIAL_VALUES = {
     name: "",
@@ -94,12 +109,19 @@ export default function Suplier() {
     phone: "",
   };
 
-  const { values, handleChange, handleReset, handleSubmit, errors, touched } =
-    useFormik({
-      initialValues: INITIAL_VALUES,
-      onSubmit: createSuplier,
-      validationSchema,
-    });
+  const {
+    values,
+    handleChange,
+    handleReset,
+    setFieldValue,
+    handleSubmit,
+    errors,
+    touched,
+  } = useFormik({
+    initialValues: INITIAL_VALUES,
+    onSubmit: createSuplier,
+    validationSchema,
+  });
 
   return (
     <Panel>
@@ -166,7 +188,10 @@ export default function Suplier() {
                   name="CNPJ"
                   label="CNPJ"
                   placeholder="Digite o CNPJ"
-                  onChange={handleChange}
+                  onChange={(e: any) =>
+                    setFieldValue("CNPJ", Mask.cnpj.value(e.target.value))
+                  }
+                  value={values.CNPJ}
                   error={errors.CNPJ}
                   touched={touched.CNPJ}
                 />
@@ -176,8 +201,10 @@ export default function Suplier() {
                   name="phone"
                   label="Telefone"
                   placeholder="Digite o telefone"
-                  onChange={handleChange}
-                  value={Mask.phone.value(values.phone)}
+                  onChange={(e: any) =>
+                    setFieldValue("phone", Mask.phone.value(e.target.value))
+                  }
+                  value={values.phone}
                   error={errors.phone}
                   touched={touched.phone}
                 />
@@ -208,5 +235,5 @@ export default function Suplier() {
 const validationSchema = Yup.object().shape({
   name: Yup.string().required("Campo obrigatório"),
   CNPJ: Yup.string().required("Campo obrigatório"),
-  phone: Yup.number().required("Campo obrigatório"),
+  phone: Yup.string().required("Campo obrigatório"),
 });
