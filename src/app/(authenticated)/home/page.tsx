@@ -103,12 +103,14 @@ export default function Home() {
       search: value,
     });
 
-    const options = response.record?.map((record: any) => {
+    const options = response?.records?.map((record: any) => {
       return {
         value: record.id,
         label: record.name,
       };
     });
+
+    console.log(options);
 
     return options;
   }

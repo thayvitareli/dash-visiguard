@@ -24,7 +24,11 @@ export default function NavItem({ title, icon, link }: NavItemProps) {
       }}
     >
       <Tooltip label={!isOpen ? `Ir para página: ${title}` : ""}>
-        <Link href={`/${link}`}>
+        <Link
+          href={`/${link}`}
+          //@ts-ignore
+          _hover={"none"}
+        >
           <Flex
             justifyContent={"center"}
             alignItems="center"
