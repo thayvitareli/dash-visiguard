@@ -47,7 +47,7 @@ export default function Input({
 
   return password ? (
     <Flex direction={"column"} width={"100%"}>
-      <Text>{label}</Text>
+      <Text color={Colors.second}>{label}</Text>
       <InputGroup style={style} mt={2} alignItems={"center"}>
         <InputChakra
           type={show ? "text" : "password"}
