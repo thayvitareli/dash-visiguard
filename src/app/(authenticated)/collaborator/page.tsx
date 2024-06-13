@@ -107,12 +107,27 @@ export default function Collaborator() {
     {
       Header: "Cargo",
       accessor: "position",
-      Cell: ({ row }: { row: any }) => <Text>{row?.position}</Text>,
+      Cell: ({ row }: { row: any }) => (
+        <Text>
+          {
+            PositionsOptions.find((option) => option.value == row?.position)
+              ?.label
+          }
+        </Text>
+      ),
     },
     {
       Header: "Setor",
       accessor: "departament",
-      Cell: ({ row }: { row: any }) => <Text>{row?.departament}</Text>,
+      Cell: ({ row }: { row: any }) => (
+        <Text>
+          {
+            DepartamentsOptions.find(
+              (option) => option.value == row?.department
+            )?.label
+          }
+        </Text>
+      ),
     },
     {
       Header: "Cadastrado em",
