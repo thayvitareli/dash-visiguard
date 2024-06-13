@@ -7,3 +7,7 @@
   Nesta etapa, estou desenvolvendo o dashboard utilizando o framework NextJS.</p>
   <p>
 
+<p>Vídeo demonstrativo de algumas funcionalidades já desenvolvidas: </p>
+
+https://github.com/thayvitareli/dash-visiguard/assets/108371984/de982088-ca0f-4a2c-ad3b-dbfb622b3b8b
+
