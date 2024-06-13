@@ -9,5 +9,8 @@
 
 <p>Vídeo demonstrativo de algumas funcionalidades já desenvolvidas: </p>
 
-https://github.com/thayvitareli/dash-visiguard/assets/108371984/de982088-ca0f-4a2c-ad3b-dbfb622b3b8b
+
+
+
+https://github.com/thayvitareli/dash-visiguard/assets/108371984/d8d685b1-18d6-4012-8d72-b18b103fcc41
 
