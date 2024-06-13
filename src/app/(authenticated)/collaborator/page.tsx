@@ -31,9 +31,10 @@ import Table from "components/Table";
 import SelectData from "components/Select";
 
 import { CollaboratorHook } from "hooks";
+import { iCollaborator } from "interfaces/hooks";
 
 export default function Collaborator() {
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState<iCollaborator.APIFindMany>();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -168,11 +169,11 @@ export default function Collaborator() {
 
       <Table
         columns={COLUMNS}
-        rows={data.record}
+        rows={data?.record || []}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalRows={data.total}
+        totalRows={data?.total ?? 1}
       />
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size={"xl"}>
