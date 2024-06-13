@@ -30,7 +30,7 @@ import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 import { iSuplier } from "interfaces/hooks";
 
 export default function Suplier() {
-  const [data, setData] = useState([] as any);
+  const [data, setData] = useState<iSuplier.APIFindMany>();
 
   const [currentPage, setCurrentPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(5);
@@ -159,11 +159,11 @@ export default function Suplier() {
 
       <Table
         columns={COLUMNS}
-        rows={data?.records}
+        rows={data?.records || []}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
-        totalRows={data?.total}
+        totalRows={data?.total ?? 1}
       />
 
       <Modal isOpen={isOpen} onClose={() => setIsOpen(false)}>

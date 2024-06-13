@@ -131,8 +131,6 @@ export default function Collaborator() {
     },
   ];
 
-  console.log(values);
-
   return (
     <Panel>
       <Text color={Colors.primary} fontSize={TextSize.heading}>
