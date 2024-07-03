@@ -4,7 +4,7 @@ import { AuthContext } from "contexts/auth.context";
 import { useContext, useEffect, useState } from "react";
 
 export function ValidateAuth({ children }: any) {
-  // const path = usePathname();
+
 
   const [render, setRender] = useState(false);
   const { me } = useContext(AuthContext);
@@ -20,7 +20,6 @@ export function ValidateAuth({ children }: any) {
   useEffect(() => {
     validateAccess();
   }, []);
-  // }, [path]);
 
   return render ? children : <></>;
 }
