@@ -17,7 +17,7 @@ import dayjs from "dayjs";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 
@@ -29,6 +29,7 @@ import SelectData from "components/Select";
 import { UserHook } from "hooks";
 import { iUser } from "interfaces/hooks";
 import { Mask } from "@tboerc/maskfy";
+import { AuthContext } from "contexts/auth.context";
 
 const PrivilegeOptions = [
   {value: 0, label:"comum"},
@@ -47,6 +48,8 @@ export default function User() {
 
   const [isOpen, setIsOpen] = useState(false);
   const [reload, setReload] = useState(false);
+
+  const {user}= useContext(AuthContext)
 
   const toast = useToast();
 
@@ -120,7 +123,10 @@ export default function User() {
   ];
 
   return (
-    <Panel>
+    <>
+    {
+      user?.pv ?
+      <Panel>
       <Text color={Colors.primary} fontSize={TextSize.heading}>
         Área de Usuários
       </Text>
@@ -184,8 +190,10 @@ export default function User() {
                 <Input
                   name="CPF"
                   label="CPF"
-                  onChange={handleChange}
+                  //@ts-ignore
+                  onChange={(e) => setFieldValue('CPF',Mask.cpf.value(e.target.value))}
                   borderColor={Colors.second}
+                  value={values.CPF}
                   placeholder="Digite o número do CPF"
                   error={errors.CPF}
                   touched={touched.CPF}
@@ -197,7 +205,7 @@ export default function User() {
                   options={PrivilegeOptions}
                   //@ts-ignore
                   onChange={(e) => {
-                    console.log(e), setFieldValue("privilege", e?.value);
+                     setFieldValue("privilege", e?.value);
                   }}
                   label="Tipo de acesso"
                   borderColor={Colors.second}
@@ -237,6 +245,11 @@ export default function User() {
         </ModalContent>
       </Modal>
     </Panel>
+     :
+     null
+    }
+    </>
+ 
   );
 }
 

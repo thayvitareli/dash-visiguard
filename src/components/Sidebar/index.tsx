@@ -15,7 +15,6 @@ export default function SideBar() {
   const { isOpen } = useSidebarContext();
   const {user} = useContext(AuthContext);
 
-  console.log(isOpen);
   return (
     <Flex
       pos="sticky"
@@ -34,17 +33,17 @@ export default function SideBar() {
           MENU
         </Text>
       )}
+
       <NavItem title={"Home"} icon={BuildingOffice2Icon} link="home" />
-      <NavItem
-        title={"Colaboradores"}
-        icon={UserGroupIcon}
-        link="collaborator"
-      />
+      <NavItem title={"Colaboradores"} icon={UserGroupIcon} link="collaborator" />
       <NavItem title={"Visitantes"} icon={FaRegAddressCard} link="visitor" />
       <NavItem title={"Prest. serviços"} icon={FaHandshake} link="suplier" />
       <NavItem title={"Veículos"} icon={GiCityCar} link="vehicle" />
 
-      {user.pv ? (      <NavItem title={"Usuários"} icon={UserPlusIcon} link="user" />): null}
+      { user.pv ?
+       ( <NavItem title={"Usuários"} icon={UserPlusIcon} link="user" />)
+        : 
+        null}
 
       
     </Flex>
