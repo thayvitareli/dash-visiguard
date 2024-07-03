@@ -19,7 +19,6 @@ export default function AuthPage() {
   const { sign } = useContext(AuthContext);
 
   const onSubmit = async (values: AuthValuesProps) => {
-    console.log(values);
     await sign({
       cpf: values.cpf,
       password: values.password,

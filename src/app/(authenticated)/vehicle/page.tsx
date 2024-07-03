@@ -105,7 +105,6 @@ export default function Vehicle() {
 
   //@ts-ignore
   const createVehicle = async (values) => {
-    console.log("submit");
     const result = await VehicleHook.create(values, toast);
 
     if (result) {
@@ -147,7 +146,6 @@ export default function Vehicle() {
             //@ts-ignore
             onChange={(e) => {
               setSearchByType(e?.value);
-              console.log(e);
             }}
             name="searchType"
             placeholder="Selecione o tipo"

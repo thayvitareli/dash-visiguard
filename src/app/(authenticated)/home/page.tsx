@@ -110,8 +110,6 @@ export default function Home() {
       };
     });
 
-    console.log(options);
-
     return options;
   }
 
@@ -169,9 +167,7 @@ export default function Home() {
   };
 
   const handleFilterBySearch = () => {
-    // const result = data.filter((value: any) => value?.name?.contains(search));
-    // console.log(result);
-    // setData(result);
+   
   };
 
   const { values, handleChange, handleSubmit, handleReset, setFieldValue } =

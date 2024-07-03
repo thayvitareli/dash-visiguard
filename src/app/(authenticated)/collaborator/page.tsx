@@ -224,7 +224,7 @@ export default function Collaborator() {
                   options={PositionsOptions}
                   //@ts-ignore
                   onChange={(e) => {
-                    console.log(e), setFieldValue("position", e?.value);
+                     setFieldValue("position", e?.value);
                   }}
                   label="cargo"
                   borderColor={Colors.second}
