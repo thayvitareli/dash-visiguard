@@ -23,6 +23,7 @@ interface InputProps {
   password?: boolean;
   value?: any;
   borderColor?: string;
+  isDisabled?: boolean
 }
 
 const style = {
@@ -42,6 +43,7 @@ export default function Input({
   password,
   value,
   borderColor = "black",
+  isDisabled = false,
 }: InputProps) {
   const [show, setShow] = useState(false);
 
@@ -86,6 +88,7 @@ export default function Input({
         style={style}
         value={value}
         borderColor={borderColor}
+        isDisabled={isDisabled}
       />
       <Box h={"30px"}>
         {error && touched && <Text color={"red"}>{error}</Text>}

@@ -12,9 +12,16 @@ export interface APIFindMany {
 export interface User {
   id: number;
 	name: string;
-	password:  string;
 	CPF: string;
 	privilege: number;
 	created_at: Date;
 	updated_at: Date;
+}
+
+export interface UpdateUser {
+  id?:number;
+  name?: string;
+  password?: string;
+  CPF?: string;
+  privilege?: number;
 }

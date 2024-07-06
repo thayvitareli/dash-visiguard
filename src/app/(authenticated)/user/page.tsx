@@ -12,11 +12,18 @@ import {
   ModalBody,
   ModalCloseButton,
   useToast,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import { EllipsisVerticalIcon } from "@heroicons/react/24/solid";
+import { PencilIcon, TrashIcon, UserMinusIcon } from "@heroicons/react/24/solid";
 import { useContext, useEffect, useState } from "react";
 
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
@@ -30,6 +37,7 @@ import { UserHook } from "hooks";
 import { iUser } from "interfaces/hooks";
 import { Mask } from "@tboerc/maskfy";
 import { AuthContext } from "contexts/auth.context";
+import React from "react";
 
 const PrivilegeOptions = [
   {value: 0, label:"comum"},
@@ -49,15 +57,25 @@ export default function User() {
   const [isOpen, setIsOpen] = useState(false);
   const [reload, setReload] = useState(false);
 
+  const [isOpenEditModal, setIsOpenEditModal] = useState(false)
+
+  const [isDeleteAlertOpen, setIsDeleteAlertOpen] = useState(false)
+
+
+  const [selectedUser,setSelectedUser] = useState({} as iUser.User)
+
   const {user}= useContext(AuthContext)
 
   const toast = useToast();
+
+  const cancelRef = React.useRef()
 
   const getData = async () => {
     const result = await UserHook.findMany();
 
     setData(result);
   };
+
 
   useEffect(() => {
     getData();
@@ -72,6 +90,13 @@ export default function User() {
       setReload(!reload);
     }
   };
+
+  const deleteUser = async(id: number)=>{
+    await UserHook.deleteUser(id, toast)
+    setIsDeleteAlertOpen(false)
+    setSelectedUser({} as iUser.User)
+    setReload(!reload)
+  }
 
   const INITIAL_VALUES = {
     name: "",
@@ -106,6 +131,13 @@ export default function User() {
       Cell: ({ row }: { row: any }) => <Text>{Mask.cpf.value(row?.CPF)}</Text>,
     },
     {
+      Header: "Permissão",
+      accessor: "privilege",
+      Cell: ({ row }: { row: any }) => (
+        <Text>{row?.privilege ?  'Admin' : 'Comum'}</Text>
+      ),
+    },
+    {
       Header: "Cadastrado em",
       accessor: "created_at",
       Cell: ({ row }: { row: any }) => (
@@ -115,12 +147,46 @@ export default function User() {
     {
       Header: "Actions",
       Cell: ({ row }: { row: any }) => (
-        <Button onClick={() => console.log(row)}>
-          <Icon as={EllipsisVerticalIcon} />
+       <Flex gap={5}>
+         <Button onClick={() => {setUpdateFormikValues(row), setIsOpenEditModal(true)}}>
+          <Icon as={PencilIcon} />
         </Button>
+        <Button onClick={() => {setSelectedUser(row), setIsDeleteAlertOpen(true)}}>
+          <Icon as={UserMinusIcon} />
+        </Button>
+       </Flex>
       ),
     },
   ];
+
+  const updateUser = async(values: iUser.UpdateUser) => {
+    console.log(values)
+    const id = Number(values.id);
+
+    if(!values.password)
+      delete values['password'];
+
+    delete values['id'];
+
+    await UserHook.update(id, values, toast)
+  }
+
+
+  const setUpdateFormikValues = (user: iUser.UpdateUser) => {
+    updateFormik.setFieldValue('name', user.name)
+    updateFormik.setFieldValue('password','')
+    updateFormik.setFieldValue('privilege',user.privilege)
+    updateFormik.setFieldValue('CPF',user.CPF)
+    updateFormik.setFieldValue('id',user.id)
+
+
+  }
+
+  const updateFormik= useFormik({
+    //@ts-ignore
+    initialValues: INITIAL_VALUES,
+    onSubmit: updateUser,
+  });
 
   return (
     <>
@@ -244,6 +310,115 @@ export default function User() {
           </ModalFooter>
         </ModalContent>
       </Modal>
+
+      <Modal isOpen={isOpenEditModal} onClose={() => setIsOpenEditModal(false)} size={"xl"}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader color={Colors.primary}>
+            Editar usuário
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Flex flexDir={"column"}>
+              <Flex gap="12px">
+                <Input
+                  name="name"
+                  label="Nome"
+                  //@ts-ignore
+                  onChange={(e) => updateFormik.setFieldValue('name',e.target.value)}
+                  borderColor={Colors.second}
+                  placeholder="Digite o nome"
+                  error={updateFormik.errors.name}
+                  touched={updateFormik.touched.name}
+                  value={updateFormik?.values.name}
+                />
+                <Input
+                  name="CPF"
+                  label="CPF"
+                  //@ts-ignore
+                  onChange={() =>{}}
+                  borderColor={Colors.second}
+                  placeholder="Digite o número do CPF"
+                  value={updateFormik?.values.CPF}
+                  isDisabled
+                />
+              </Flex>
+              <Flex gap="12px">
+                <SelectData
+                  name="privilege"
+                  options={PrivilegeOptions}
+                  //@ts-ignore
+                  onChange={(e) => {
+                     updateFormik.setFieldValue("privilege", e?.value);
+                  }}
+                  label="Tipo de acesso"
+                  borderColor={Colors.second}
+                  placeholder="Selecione"
+                  error={updateFormik.errors.privilege}
+                  touched={updateFormik.touched.privilege}
+                  value={PrivilegeOptions.find(option => option.value == Number(updateFormik.values.privilege))?.value}
+                />
+                <Input
+                  name="password"
+                  password
+                  label="Senha"
+                  onChange={(e: any) => updateFormik.setFieldValue("password", e.target.value)}
+                  borderColor={Colors.second}
+                  placeholder="Digite a senha"
+                  error={updateFormik.errors.password}
+                  touched={updateFormik.touched.password}
+                />
+                
+              </Flex>
+            </Flex>
+          </ModalBody>
+
+          <ModalFooter>
+            <Button
+              colorScheme="blue"
+              mr={3}
+              onClick={(e) => {
+                setIsOpenEditModal(false), updateFormik.handleReset(e);
+              }}
+            >
+              Cancelar
+            </Button>
+            <Button colorScheme="blue" onClick={() => updateFormik.handleSubmit()}>
+              Salvar
+            </Button>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <AlertDialog
+        isOpen={isDeleteAlertOpen}
+        //@ts-ignore
+        leastDestructiveRef={cancelRef}
+        onClose={()=> setIsDeleteAlertOpen(false)}
+      >
+        <AlertDialogOverlay>
+          <AlertDialogContent>
+            <AlertDialogHeader fontSize='lg' fontWeight='bold'>
+              Remover usuário
+            </AlertDialogHeader>
+
+            <AlertDialogBody>
+             Você tem certeza que deseja remover o usuário <b>{selectedUser?.name }</b>? <br/><br/>
+             O usuário continuará a existir no banco, mas sua visualização e acesso ao sistema estarão indisponíveis. <br/><br/>
+             <b>Essa ação não poderá ser desfeita.</b>         
+             </AlertDialogBody>
+
+            <AlertDialogFooter>
+              <Button onClick={()=> { setIsDeleteAlertOpen(false), setSelectedUser({} as iUser.User)}}>
+                Cancelar
+              </Button>
+              <Button colorScheme='red' onClick={() => deleteUser(selectedUser?.id)} ml={3}>
+                Deletar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialogOverlay>
+      </AlertDialog>
     </Panel>
      :
      null
@@ -259,3 +434,6 @@ const validationSchema = Yup.object().shape({
   password: Yup.string().required("Campo obrigatório"),
   privilege: Yup.number().required("Seleção obrigatória"),
 });
+
+
+

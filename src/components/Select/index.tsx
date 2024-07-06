@@ -11,6 +11,7 @@ interface SelectProps {
   borderColor?: string;
   error?: any;
   touched?: boolean;
+  value?: any
 }
 
 export default function SelectData({
@@ -22,6 +23,7 @@ export default function SelectData({
   borderColor,
   error,
   touched,
+  value
 }: SelectProps) {
   return (
     <Flex direction={"column"} width={"100%"} justifyContent={"center"}>
@@ -35,6 +37,7 @@ export default function SelectData({
         onChange={onChange}
         name={name}
         options={options}
+        value={value}
       />
       <Box h={"30px"}>
         {error && touched && <Text color={"red"}>{error}</Text>}
