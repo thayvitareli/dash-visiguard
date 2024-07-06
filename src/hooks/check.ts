@@ -2,20 +2,17 @@ import iCreateCheckIn from "interfaces/hooks/check-in.interface";
 import api from "services/api";
 
 export const findMany = async ({
-  skip,
-  take,
-  search,
+ from,
+ to
 }: {
-  skip?: number;
-  take?: number;
-  search?: string;
+  from?: Date;
+  to?: Date;
 }) => {
   try {
     const response = await api.get("/check-in-out", {
       params: {
-        skip,
-        take,
-        search,
+        from,
+        to,
       },
     });
 

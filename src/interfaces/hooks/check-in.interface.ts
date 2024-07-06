@@ -7,3 +7,8 @@ export default interface iCreateCheckIn {
   collaborator_id?: string | number;
   visitor_id?: string | number;
 }
+
+export interface iCheckFindManyProps {
+  from?:any,
+  to?:any
+}
