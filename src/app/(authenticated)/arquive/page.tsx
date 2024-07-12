@@ -13,7 +13,7 @@ import React, { useEffect, useState } from "react";
 import Table from "components/Table";
 import Panel from "components/Panel";
 
-import { findMany } from "hooks/check";
+import { exportRegisterToXLSX, findMany } from "hooks/check";
 
 import { ButtonStyle, Colors, TextSize } from "assets/config/theme";
 
@@ -23,6 +23,8 @@ import "react-datepicker/dist/react-datepicker.css";
 
 import { TrashIcon } from "@heroicons/react/24/solid";
 import { ptBR } from "date-fns/locale";
+
+import * as FileSaver from 'file-saver';
 
 
 
@@ -37,10 +39,7 @@ export default function Home() {
     }
   );
 
-
-
   const [refresh, setRefresh] = useState(false);
-
 
   const getChecks = async () => {
     const result = await findMany({ from: dayjs(datesToFilter?.from).toDate(), to: dayjs(datesToFilter?.to).toDate()});
@@ -52,6 +51,19 @@ export default function Home() {
     getChecks();
   }, [refresh, currentPage, datesToFilter?.from, datesToFilter?.to]);
 
+  const onExport =async ()=>{
+    const result = await exportRegisterToXLSX({from: dayjs(datesToFilter?.from).toDate(), to: dayjs(datesToFilter?.to).toDate()})
+    
+    if(result){
+      const { name, mimetype, buffer } = result;
+
+      const arrayBuffer = new Uint8Array(buffer.data).buffer;
+
+      const blob = new Blob([arrayBuffer], { type: mimetype });
+
+      FileSaver.saveAs(blob, name);
+    }
+  }
 
   const COLUMNS = [
     {
@@ -147,6 +159,7 @@ export default function Home() {
            
         <Button
           style={{ ...ButtonStyle, width: 350 }}
+          onClick={onExport}
         >
           Exportar 
         </Button>

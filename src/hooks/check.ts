@@ -1,13 +1,7 @@
 import iCreateCheckIn from "interfaces/hooks/check-in.interface";
 import api from "services/api";
 
-export const findMany = async ({
- from,
- to
-}: {
-  from?: Date;
-  to?: Date;
-}) => {
+export const findMany = async ({ from, to }: { from?: Date; to?: Date }) => {
   try {
     const response = await api.get("/check-in-out", {
       params: {
@@ -75,5 +69,26 @@ export const registerCheckIn = async (data: iCreateCheckIn, toast: any) => {
       duration: 3000,
       isClosable: true,
     });
+  }
+};
+
+export const exportRegisterToXLSX = async ({
+  from,
+  to,
+}: {
+  from?: Date;
+  to?: Date;
+}) => {
+  try {
+    const response = await api.get("/check-in-out/export", {
+      params: {
+        from,
+        to,
+      },
+    });
+
+    return response.data;
+  } catch (error: any) {
+    console.log(error);
   }
 };
