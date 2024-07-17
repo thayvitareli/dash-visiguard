@@ -20,6 +20,7 @@ const Table = ({
   currentPage,
   setCurrentPage,
   totalRows,
+  id,
 }: {
   columns: any[];
   rows: any[];
@@ -27,6 +28,7 @@ const Table = ({
   currentPage: number;
   setCurrentPage: any;
   totalRows: number;
+  id: string
 }) => {
   const handleNextPage = () => {
     setCurrentPage((prevPage: any) =>
@@ -44,6 +46,7 @@ const Table = ({
         backgroundColor={Colors.second}
         borderRadius={4}
         borderWidth={1}
+        id={id}
       >
         <Thead>
           <Tr>

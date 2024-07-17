@@ -5,10 +5,12 @@ import {
   Text,
  Button,
   useToast,
+  Box,
  
 } from "@chakra-ui/react";
 import dayjs from "dayjs";
-import React, { useEffect, useState } from "react";
+import 'dayjs/locale/pt-br'
+import React, { useEffect, useRef, useState } from "react";
 
 import Table from "components/Table";
 import Panel from "components/Panel";
@@ -25,8 +27,9 @@ import { TrashIcon } from "@heroicons/react/24/solid";
 import { ptBR } from "date-fns/locale";
 
 import * as FileSaver from 'file-saver';
+import { jsPDF } from "jspdf";
 
-
+import html2canvas from 'html2canvas';
 
 export default function Home() {
   const [data, setData] = useState([]);
@@ -40,6 +43,8 @@ export default function Home() {
   );
 
   const [refresh, setRefresh] = useState(false);
+
+  const pdfRef = useRef(null)
 
   const getChecks = async () => {
     const result = await findMany({ from: dayjs(datesToFilter?.from).toDate(), to: dayjs(datesToFilter?.to).toDate()});
@@ -64,6 +69,25 @@ export default function Home() {
       FileSaver.saveAs(blob, name);
     }
   }
+
+  const onGeneratePDF = () => {
+    const fromFormated = dayjs(datesToFilter.from).subtract(3,'h').format('DD/MM/YYYY')
+    const toFormated = dayjs(datesToFilter.to).subtract(3,'h').format('DD/MM/YYYY')
+    const pdf = new jsPDF('p','pt','a4');
+    const elementToConvert = document.getElementById('content-to-pdf')
+    const margin = 10;
+  
+    pdf.text(`Registros de entrada e saída - de ${fromFormated} à ${toFormated}`, margin, margin + 30)
+
+    //@ts-ignore
+    html2canvas(elementToConvert).then((canvas) => {
+      const imgData = canvas.toDataURL('image/jpeg', 1.0);
+        pdf.addImage(imgData, 'JPEG', margin, margin+60, 570, 0, undefined, 'FAST');
+
+        pdf.save(`Registros_de_${fromFormated}_a_${toFormated}.pdf`);
+    }).catch((error) => console.log(error))
+   
+}
 
   const COLUMNS = [
     {
@@ -161,22 +185,26 @@ export default function Home() {
           style={{ ...ButtonStyle, width: 350 }}
           onClick={onExport}
         >
-          Exportar 
+          Exportar XLSX
+        </Button>
+        <Button
+          style={{ ...ButtonStyle, width: 350 }}
+          onClick={onGeneratePDF}
+        >
+          Baixar PDF
         </Button>
       </Flex>
 
-  
 
-    
-      <Table
+-      <Table
         columns={COLUMNS}
         rows={data}
         rowsPerPage={rowsPerPage}
         currentPage={currentPage}
         setCurrentPage={setCurrentPage}
         totalRows={data?.length ?? 1}
-      />
-
+        id={'content-to-pdf'}
+        />
     
     </Panel>
   );
